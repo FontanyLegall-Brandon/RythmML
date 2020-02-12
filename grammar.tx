@@ -1,9 +1,9 @@
 RythmML :
-    sections+=Section
+    track+=Track
 ;
 
-Section :
-    'Section' name=ID '{' bars+=Bar '}'
+Track :
+    'Track' name=ID '{' bars+=Bar '}'
 ;
 
 Note :
