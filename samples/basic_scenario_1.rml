@@ -1,15 +1,13 @@
-
-
-Section chuck_berry_drums {
-    Bar main_drums {
-       Beat drum_2 4 {
-            DRUM be 1 1
-            DRUM be 2 1
-            DRUM be 3 1
-            DRUM bd 1 1
-            DRUM bd 3 1
-            DRUM sd 2 1
-            DRUM sd 4 1
-       }
-    }
+Track toto DRUM {
+	Bar main_drum {
+		Beat beat_1 4{
+			be 1 1
+            		be 2 1
+            		be 3 1
+            		bd 1 1
+            		bd 3 1
+            		sd 2 1
+            		sd 4 1	
+		}
+	}
 }

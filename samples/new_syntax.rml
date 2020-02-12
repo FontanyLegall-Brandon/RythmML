@@ -1,0 +1,21 @@
+setup {
+	bpm = ?
+	
+}
+
+
+Track 'trackname' instrument {
+	Bar 'bar1' {
+		Beats {
+			
+		}
+	}
+	
+	Bar 'bar2' {
+			note(#C, velocity?, beat, tick, duration)
+			note(#C, velocity?, 3, 10)
+	}
+}
+
+
+
