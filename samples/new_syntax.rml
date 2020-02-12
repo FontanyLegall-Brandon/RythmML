@@ -1,21 +1,19 @@
-setup {
-	bpm = ?
-	
-}
+//definition des mesures
+bpm=?
+#pattern p1 ....|....|....|.... //ou si que des 4 tick par beat: #beat 4
 
+Bar bar1 with p1
+xx..|xx..|xx..|xx.. bd 
+..x.|..x.|..x.|..x. sd 
+x---|x---|x---|x--- piano#F
 
-Track 'trackname' instrument {
-	Bar 'bar1' {
-		Beats {
-			
-		}
-	}
-	
-	Bar 'bar2' {
-			note(#C, velocity?, beat, tick, duration)
-			note(#C, velocity?, 3, 10)
-	}
-}
+Section intro:
+bar_1
 
+Section suite:
+bar_2
+REPEAT bar_2 10
 
-
+Track toto:
+intro
+suite

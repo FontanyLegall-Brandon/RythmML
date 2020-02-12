@@ -1,4 +1,4 @@
-define instr_1 soundbanck=/home/jdeanton/.... channel 3
+define instr_1 DRUM
 
 Track toto instr_1 {
 	main_drum
