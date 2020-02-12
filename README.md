@@ -11,3 +11,7 @@ Intall first those packages :
 apt install libasound2-dev libjack-jackd2-dev
 pip3 install python-rtmidi
 ```
+
+### Windows
+
+http://trac.chrisarndt.de/code/wiki/python-rtmidi
