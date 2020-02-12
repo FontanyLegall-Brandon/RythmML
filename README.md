@@ -14,4 +14,11 @@ pip3 install python-rtmidi
 
 ### Windows
 
-http://trac.chrisarndt.de/code/wiki/python-rtmidi
+```
+pip install python-rtmidi
+```
+
+If Cython is needed:
+```
+pip install Cython
+```
