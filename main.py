@@ -1,10 +1,22 @@
 import textx as tx
+import time
+import rtmidi
 
-type_builtins = {}
+class Track(object):
+    def __init__(self,name):
+        self.name = name
 
-if __name__ == '__main__':
+class Bar(object):
+    def __init__(self,name):
+        self.name = name
 
-    classes = []
-    meta_model = tx.metamodel_from_file('grammar.tx', classes=classes, builtins=type_builtins)
+class Beat(object):
+    def __init__(self,name):
+        self.name = name
 
-    model = meta_model.model_from_file('samples/basic_scenario_1.rml')
+
+class Note(object):
+    def __init__(self, value, tick_pos, duration):
+        self.value = value
+        self.tick_pos = tick_pos
+        self.duration = duration
