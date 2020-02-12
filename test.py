@@ -8,7 +8,7 @@ if available_ports:
     midiout.open_port(0)
 else:
     midiout.open_virtual_port("My virtual output")
-
+time.sleep(0.5)
 with midiout:
     note_on = [0x90, 60, 112] # channel 1, middle C, velocity 112
     note_off = [0x80, 60, 0]
