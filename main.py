@@ -1,3 +1,6 @@
+import os
+import textx as tx
+
 class Model(object):
     def __init__(self, parent, name, bpm, bar_list, section_list, track):
         self.parent = parent
@@ -62,3 +65,25 @@ class BeatPattern(object):
     def __init__(self, parent, beats):
         self.parent = parent
         self.beats = beats
+
+if __name__ == "__main__":
+
+    if __name__ == '__main__':
+
+        classes = [Model, Section, Track]
+
+        meta_model = tx.metamodel_from_file('grammar.tx', classes=classes)
+        try:
+            os.mkdir('out')
+        except FileExistsError:
+            pass
+
+        for file_name in os.listdir('samples'):
+            ID_REGISTRY = dict()
+            READABLE_BRICK = dict()
+            print("Translating {}".format(file_name))
+            model = meta_model.model_from_file('samples/{}'.format(file_name))
+
+            out = open('out/{}'.format(file_name.replace('.rml', '.midi')), 'w')
+            print(model, file=out)
+            out.close()
