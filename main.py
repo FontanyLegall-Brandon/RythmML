@@ -38,11 +38,16 @@ class Pattern(object):
 
 
 class NotePattern(object):
-    def __init__(self, parent, name, value):
+    def __init__(self, parent, name, ticks):
         self.parent = parent
         self.name = name
-        self.value = value  # string
+        self.ticks = ticks
 
+
+class Tick(object):
+    def __init__(self, parent, value):
+        self.parent = parent
+        self.value.value
 
 class NoteList(object):
     def __init__(self, parent, note_pattern, note):
