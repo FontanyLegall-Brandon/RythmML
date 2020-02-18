@@ -22,11 +22,11 @@ class Track(object):
 
 
 class Bar(object):
-    def __init__(self, parent, name, pattern, beats):
+    def __init__(self, parent, name, pattern, beat_patterns):
         self.parent = parent
         self.name = name
         self.pattern = pattern
-        self.beats = beats
+        self.beat_patterns = beat_patterns
 
 
 class Pattern(object):
@@ -57,3 +57,8 @@ class Note(object):
     def __init__(self, parent, value):
         self.parent = parent
         self.value = value
+
+class BeatPattern(object):
+    def __init__(self, parent, beats):
+        self.parent = parent
+        self.beats = beats
