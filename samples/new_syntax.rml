@@ -2,7 +2,7 @@
 bpm=?
 #pattern p1 ....|....|....|.... //ou si que des 4 tick par beat: #beat 4
 
-Bar bar1 with p1
+Bar bar1 with p1:
 xx..|xx..|xx..|xx.. bd 
 ..x.|..x.|..x.|..x. sd 
 x---|x---|x---|x--- piano#F

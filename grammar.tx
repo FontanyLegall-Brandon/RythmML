@@ -1,24 +1,41 @@
 RythmML :
-    track+=Track
+    'BPM' bpm=[bpm]
+    patterns += Pattern
+    bars += Bar
+    sections += Section
+    track = track
+;
+
+Pattern :
+    "#pattern" name=ID beats+=Beat
+
+;
+
+Section :
+    'Section' name=ID ':' bars+=Bar |
+    'Section' name=ID ':' 'REPEAT' bars+=Bar
 ;
 
 Track :
-    'Track' name=ID '{' bars+=Bar '}'
-;
-
-Note :
-    type=Type note=STRING tick_pos=INT duration=INT
+    'Track' name=ID ':' sections+=Section
 ;
 
 Bar :
-    'Bar' name=ID '{' beats+=Beat '}'
+    'Bar' name=ID 'with' pattern=ID ':' beats+=Beat
 ;
+
 
 Beat :
-    'Beat' name=ID size=INT '{' notes+=Note '}'
+     ticks+=Tick note=STRING |
+     ticks+=Tick
 ;
 
-Type :
-    type='PIANO' | type='DRUM'
+Tick :
+    '.' | 'x' | Separator
 ;
+
+Separator :
+    '|'
+;
+
 
