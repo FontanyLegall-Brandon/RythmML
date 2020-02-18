@@ -7,7 +7,6 @@ class Model(object):
         self.section_list = section_list
         self.track = track
 
-
 class Section(object):
     def __init__(self, parent, name, bar_list):
         self.parent = parent
@@ -38,16 +37,29 @@ class Pattern(object):
 
 
 class NotePattern(object):
-    def __init__(self, parent, name, ticks):
+    def __init__(self, parent, name, beats):
         self.parent = parent
         self.name = name
-        self.ticks = ticks
+        self.beats = beats
 
 
 class Tick(object):
     def __init__(self, parent, value):
         self.parent = parent
         self.value.value
+
+
+class Beat(object):
+    def __init__(self, parent, ticks):
+        self.parent = parent
+        self.ticks = ticks
+
+
+class Separator(object):
+    def __init__(self, parent, value):
+        self.parent = parent
+        self.value = value
+
 
 class NoteList(object):
     def __init__(self, parent, note_pattern, note):
