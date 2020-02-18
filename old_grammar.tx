@@ -1,0 +1,24 @@
+RythmML :
+    track+=Track
+;
+
+Track :
+    'Track' name=ID '{' bars+=Bar '}'
+;
+
+Note :
+    type=Type note=STRING tick_pos=INT duration=INT
+;
+
+Bar :
+    'Bar' name=ID '{' beats+=Beat '}'
+;
+
+Beat :
+    'Beat' name=ID size=INT '{' notes+=Note '}'
+;
+
+Type :
+    type='PIANO' | type='DRUM'
+;
+
