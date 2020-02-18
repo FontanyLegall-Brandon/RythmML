@@ -38,7 +38,7 @@ class Pattern(object):
 class Tick(object):
     def __init__(self, parent, value):
         self.parent = parent
-        self.value.value
+        self.value = value
 
 
 class Beat(object):
