@@ -22,11 +22,11 @@ class Track(object):
 
 
 class Bar(object):
-    def __init__(self, parent, name, pattern, note_lines):
+    def __init__(self, parent, name, pattern, beats):
         self.parent = parent
         self.name = name
         self.pattern = pattern
-        self.note_lines = note_lines
+        self.beats = beats
 
 
 class Pattern(object):
@@ -35,14 +35,6 @@ class Pattern(object):
         self.name = name
         self.list = list  # liste d'entiers
 
-
-class NotePattern(object):
-    def __init__(self, parent, name, beats):
-        self.parent = parent
-        self.name = name
-        self.beats = beats
-
-
 class Tick(object):
     def __init__(self, parent, value):
         self.parent = parent
@@ -50,23 +42,16 @@ class Tick(object):
 
 
 class Beat(object):
-    def __init__(self, parent, ticks):
+    def __init__(self, parent, ticks, note):
         self.parent = parent
         self.ticks = ticks
+        self.note = note
 
 
 class Separator(object):
     def __init__(self, parent, value):
         self.parent = parent
         self.value = value
-
-
-class NoteList(object):
-    def __init__(self, parent, note_pattern, note):
-        self.parent = parent
-        self.note_pattern = note_pattern
-        self.note = note
-
 
 class Note(object):
     def __init__(self, parent, value):
