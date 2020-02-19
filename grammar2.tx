@@ -1,0 +1,18 @@
+Model :
+    'BPM ' bpm=INT
+    bars += Bar
+    sections += Section
+
+;
+
+Bar :
+    'Bar' name=ID 'with'
+;
+
+Section :
+    'Section' name=ID ':' bars+=[Bar]
+;
+
+Bar :
+    'Bar' name=ID 'with'
+;
