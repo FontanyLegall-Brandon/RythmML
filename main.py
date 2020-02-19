@@ -76,6 +76,8 @@ class Beat(object):
         self.ticks = ticks
         self.note = note
 
+    def is_beat_size_equals(self, beat):
+        return len(self.ticks) == len(beat.ticks)
 
 class Separator(object):
     def __init__(self, parent, value):
@@ -93,6 +95,18 @@ class BeatPattern(object):
         self.beats = beats
 
 
+    def is_beatPattern_matching_with_pattern(self,pattern):
+
+        base_pattern_size = len(pattern.beats)
+
+        if(len(self.beats) != len(pattern.beats)):
+            return False
+
+        for beat_index in range(base_pattern_size) :
+            if(not self.beats[0].is_beat_size_equals(pattern.beats[beat_index])):
+                return False
+
+        return True
 
 
 if __name__ == "__main__":
