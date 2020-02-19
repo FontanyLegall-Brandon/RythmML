@@ -12,15 +12,11 @@ class Model(object):
     def generate_rtmidiout_and_port(self):
         return 'midiout = rtmidi.MidiOut()\navailable_ports = midiout.get_ports()\n'.format()
 
-
-
-
     def generate_track(self):
         return '\n'.join(self.track)
 
     def __str__(self):
         out = self.generate_rtmidiout_and_port()
-        out += self.generate_port_checker()
         out += self.generate_track()
 
 class Section(object):
