@@ -44,6 +44,7 @@ class Section(object):
         out += "\n"+self.generate_bar_list()
         return out
 
+
 class Track(object):
     def __init__(self, parent, name, sections):
         self.parent = parent
@@ -56,6 +57,7 @@ class Track(object):
     def __str__(self):
         out = self.generate_sections()
         return out
+
 
 class Bar(object):
     def __init__(self, parent, name, pattern, beat_patterns):

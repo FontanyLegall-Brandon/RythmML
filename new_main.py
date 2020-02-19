@@ -5,14 +5,25 @@ NOTE = {'bd': 60}
 
 
 class Model(object):
-    def __init__(self, sections):
+    def __init__(self, sections, tracks):
         self.sections = sections
+        self.tracks = tracks
 
     def __str__(self):
         out = ''
-        for section in self.sections:
-            out += '\n' + str(section)
+        out += '\n'.join([str(section) for section in self.sections])
+        out += '\n'.join([str(track) for track in self.tracks])
         return out
+
+
+class Track(object):
+    def __init__(self, parent, name, sections):
+        self.parent = parent
+        self.name = name
+        self.sections = sections
+
+    def __str__(self):
+        return '\nTrack ' + self.name + '\n' + '\n'.join([section.name for section in self.sections]) + '\n'
 
 
 class Section(object):
@@ -40,9 +51,10 @@ class Bar(object):
 
 if __name__ == '__main__':
 
-    classes = [Model, Bar, Section]
+    classes = [Model, Bar, Section, Track]
 
-    meta_model = tx.metamodel_from_file('grammar_bars.tx', classes=classes)
+    meta_model = tx.metamodel_from_file('new_grammar.tx', classes=classes)
+
     try:
         os.mkdir('out')
     except FileExistsError:
