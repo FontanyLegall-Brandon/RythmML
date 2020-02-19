@@ -8,12 +8,20 @@ from mido import MidiFile, MidiTrack
 NOTE = {'bd' : 60}
 
 class Model(object):
-    def __init__(self, beats):
+    def __init__(self, bpm, patterns, bars, sections, track):
+        self.bpm = bpm
+        self.patterns = patterns
+        self.bars = bars
+        self.sections = sections
+        self.track = track
         self.beats = beats
         self.mid = MidiFile()
 
     def generate_code(self):
         return '\n'.join([str(beat) for beat in self.beats])
+
+    def generate_track(self):
+        return '\n'.join(self.track)
 
     def __str__(self):
         res = ''
@@ -23,32 +31,31 @@ class Model(object):
 
 
 class Section(object):
-    def __init__(self, parent, name, bar_list):
+    def __init__(self, parent, name, bars):
         self.parent = parent
         self.name = name
-        self.bar_list = bar_list
+        self.bars = bars
 
     def generate_bar_list(self):
-        return '\n'.join([str(bar) for bar in self.bar_list])
+        return '\n'.join([str(bar) for bar in self.bars])
 
     def __str__(self):
-        out = self.generate_bar_list()
+        out = self.name
+        out += "\n"+self.generate_bar_list()
         return out
-
 
 class Track(object):
-    def __init__(self, parent, name, section_list):
+    def __init__(self, parent, name, sections):
         self.parent = parent
         self.name = name
-        self.section_list = section_list
+        self.sections = sections
 
-    def generate_section_list(self):
-        return '\n'.join([str(section) for section in self.section_list])
+    def generate_sections(self):
+        return '\n'.join([str(section) for section in self.sections])
 
     def __str__(self):
-        out = self.generate_section_list()
+        out = self.generate_sections()
         return out
-
 
 class Bar(object):
     def __init__(self, parent, name, pattern, beat_patterns):
@@ -72,7 +79,7 @@ class Pattern(object):
     def __init__(self, parent, name, beatPattern):
         self.parent = parent
         self.name = name
-        self.beatPattern = beatPattern  # liste d'entiers
+        self.beatPattern = BeatPattern(self, beatPattern)
 
 
 class Beat(object):
@@ -106,9 +113,9 @@ class BeatPattern(object):
     def __init__(self, parent, beats, pattern):
         self.parent = parent
         self.beats = beats
-        self.pattern = pattern
+        self.size = [len(token) for token in ''.join([str(beat) for beat in self.beats]).split('|')]
 
-    def is_beatPattern_matching_with_pattern(self, pattern):
+    def is_beatPattern_matching_with_pattern(self,pattern):
 
         base_pattern_size = len(pattern.beats)
 
@@ -127,12 +134,14 @@ class BeatPattern(object):
             return "Beat pattern is not matching with bar pattern"
         return '\n'.join([str(beat) for beat in self.beats])
 
+    def __str__(self):
+        return str(self.size)
 
 if __name__ == '__main__':
 
-    classes = [Model, Beat]
+    classes = [Model, BeatPattern, Pattern, Track, Section]
 
-    meta_model = tx.metamodel_from_file('grammar_bars.tx', classes=classes)
+    meta_model = tx.metamodel_from_file('grammar_pattern.tx', classes=classes)
     try:
         os.mkdir('out')
     except FileExistsError:

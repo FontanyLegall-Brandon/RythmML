@@ -1,19 +1,12 @@
 
 BPM 120
 #pattern p1 ....|....|....|....
+Bar bar1 with
 
-Bar bar1 with p1:
-xx..|xx..|xx..|xx.. bd 
-..x.|..x.|..x.|..x. sd 
-x...|x...|x...|x... piano
+Section intro {
+bar1
+}
 
-Section intro:
-bar_1
-
-Section suite:
-bar_2
-REPEAT bar_2 10
-
-Track toto:
+Track name {
 intro
-suite
+}
