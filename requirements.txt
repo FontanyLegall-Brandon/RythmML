@@ -1,3 +1,4 @@
 textx
 Cython
 python-rtmidi
+mido

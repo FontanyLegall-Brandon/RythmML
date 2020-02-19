@@ -1,0 +1,19 @@
+Model :
+    beats+=Beat
+;
+
+Beat :
+     ticks+=Tick note=ID
+;
+
+Tick :
+    '.' Separator Tick |
+    'x' Separator Tick |
+    '.' Tick |
+    'x' Tick |
+    '.' | 'x'
+;
+
+Separator :
+    '|'
+;

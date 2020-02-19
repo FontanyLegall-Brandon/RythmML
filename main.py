@@ -1,26 +1,26 @@
 import os
 import textx as tx
 
-NOTE = {'bd':'BASSDRUM'}
+import time
+import rtmidi
+from mido import MidiFile, MidiTrack
+
+NOTE = {'bd' : 60}
 
 class Model(object):
-    def __init__(self, parent, bpm, bar_list, section_list, track):
-        self.parent = parent
-        self.bpm = bpm
-        self.bar_list = bar_list
-        self.section_list = section_list
-        self.track = track
+    def __init__(self, beats):
+        self.beats = beats
+        self.mid = MidiFile()
 
-    def generate_rtmidiout_and_port(self):
-        return 'midiout = rtmidi.MidiOut()\navailable_ports = midiout.get_ports()\n'.format()
-
-    def generate_track(self):
-        return '\n'.join(self.track)
+    def generate_code(self):
+        return '\n'.join([str(beat) for beat in self.beats])
 
     def __str__(self):
-        out = self.generate_rtmidiout_and_port()
-        out += self.generate_track()
-        return out
+        res = ''
+        res += self.setup()
+        res += self.generate_code()
+        return res
+
 
 class Section(object):
     def __init__(self, parent, name, bar_list):
@@ -67,109 +67,84 @@ class Bar(object):
         out = self.generate_beat_patterns()
         return out
 
+
 class Pattern(object):
     def __init__(self, parent, name, beatPattern):
         self.parent = parent
         self.name = name
-        self.beatPattern = beatPattern # liste d'entiers
-
-class Tick(object):
-    def __init__(self, parent, value):
-        self.parent = parent
-        self.value = value
+        self.beatPattern = beatPattern  # liste d'entiers
 
 
 class Beat(object):
+
     def __init__(self, parent, ticks, note):
         self.parent = parent
-        self.ticks = ticks
+        self.ticks = ticks[0]
         self.note = note
-        self.bpm = parent.get_bpm()
-        self.number_of_ticks = (len(self.ticks)+1)
-
-    def is_beat_size_equals(self, beat):
-        return len(self.ticks) == len(beat.ticks)
-
-    def generate(self):
-        for tick in self.ticks:
-            if(tick.value == '.'):
-                return '\n'.join('time.sleep('+str(60/(self.bpm*self.number_of_ticks))+')')
-            else :
-                note = Note(self,self.note)
-                return '\n'.join(str(note))
+        self.track = MidiTrack()
+        self.mid = parent.mid
+        self.mid.append(self.track)
+        self.current_tick = 0
 
     def __str__(self):
-        out = self.generate()
-        return out
-
-class Separator(object):
-    def __init__(self, parent, value):
-        self.parent = parent
-        self.value = value
-
-class Note(object):
-    def __init__(self, parent, value):
-        self.parent = parent
-        self.value = value
-
-    def generate(self):
+        # TODO put midi code inside stp
         out = ''
-        out += '\nnote_on = [0x90',NOTE[self.value],'112]'
-        out += '\nnote_on = [0x80', NOTE[self.value], '112]'
-        out += '\nmidiout.send_message(note_on)'
-        out += '\n'.join('time.sleep('+str(60/(self.parent.bpm*self.parent.number_of_ticks))+')')
+        for tick in self.ticks:
+            if tick == 'x':
+                self.play_note()
+            self.current_tick += 1
         return out
 
-    def __str__(self):
-        out = self.generate()
-        return out
+    def play_note(self):
+        note_on = [0x90, NOTE[self.note], 112]
+        time.sleep(60 / (120 * 4))  # TODO 60 / bpm * tick_number
+        note_off = [0x80, NOTE[self.note], 112]
+        self.track.append(self.mid.Message('note_on', note=NOTE[self.note], velocity=self.volume[i], time=self.time[i]))
+        midiout.send_message(note_on)
 
 class BeatPattern(object):
-    def __init__(self, parent, beats):
+    def __init__(self, parent, beats, pattern):
         self.parent = parent
         self.beats = beats
+        self.pattern = pattern
 
-    def get_bpm(self):
-        return self.parent.get_bpm()
-
-    def is_beatPattern_matching_with_pattern(self,pattern):
+    def is_beatPattern_matching_with_pattern(self, pattern):
 
         base_pattern_size = len(pattern.beats)
 
-        if(len(self.beats) != base_pattern_size):
+        if (len(self.beats) != base_pattern_size):
             return False
 
-        for beat_index in range(base_pattern_size) :
-            if(not self.beats[0].is_beat_size_equals(pattern.beats[beat_index])):
+        for beat_index in range(base_pattern_size):
+            if (not self.beats[0].is_beat_size_equals(pattern.beats[beat_index])):
                 return False
 
         return True
 
     def generate_beats(self):
 
-        if(not self.is_beatPattern_matching_with_pattern(self.parent.pattern)):
+        if (not self.is_beatPattern_matching_with_pattern(self.parent.pattern)):
             return "Beat pattern is not matching with bar pattern"
         return '\n'.join([str(beat) for beat in self.beats])
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
-    if __name__ == '__main__':
+    classes = [Model, Beat]
 
-        classes = [Model, Section, Track]
+    meta_model = tx.metamodel_from_file('grammar_bars.tx', classes=classes)
+    try:
+        os.mkdir('out')
+    except FileExistsError:
+        pass
 
-        meta_model = tx.metamodel_from_file('grammar.tx', classes=classes)
-        try:
-            os.mkdir('out')
-        except FileExistsError:
-            pass
+    for file_name in os.listdir('samples'):
+        ID_REGISTRY = dict()
+        READABLE_BRICK = dict()
+        print("Translating {}".format(file_name))
+        model = meta_model.model_from_file('samples/{}'.format(file_name))
 
-        for file_name in os.listdir('samples'):
-            ID_REGISTRY = dict()
-            READABLE_BRICK = dict()
-            print("Translating {}".format(file_name))
-            model = meta_model.model_from_file('samples/{}'.format(file_name))
-
-            out = open('out/{}'.format(file_name.replace('.rml', '.midi')), 'w')
-            print(model, file=out)
-            out.close()
+        out = open('out/{}'.format(file_name.replace('.rml', '.py')), 'w')
+        print(model, file=out)
+        print(model)
+        out.close()
