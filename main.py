@@ -4,9 +4,12 @@ import textx as tx
 NOTE = {'bd':'BASSDRUM'}
 
 class Model(object):
-    def __init__(self, bpm, patterns):
+    def __init__(self, bpm, patterns, bars, sections, track):
         self.bpm = bpm
         self.patterns = patterns
+        self.bars = bars
+        self.sections = sections
+        self.track = track
 
     def generate_rtmidiout_and_port(self):
         return 'midiout = rtmidi.MidiOut()\navailable_ports = midiout.get_ports()\n'.format()
@@ -150,7 +153,7 @@ class BeatPattern(object):
 
 if __name__ == "__main__":
 
-    classes = [Model, BeatPattern, Pattern]
+    classes = [Model, BeatPattern, Pattern, Track, Section]
 
     meta_model = tx.metamodel_from_file('grammar_pattern.tx', classes=classes)
     try:

@@ -1,3 +1,12 @@
 
 BPM 120
 #pattern p1 ....|....|....|....
+Bar bar1 with
+
+Section intro {
+bar1
+}
+
+Track name {
+intro
+}
