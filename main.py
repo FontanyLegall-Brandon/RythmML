@@ -2,13 +2,26 @@ import os
 import textx as tx
 
 class Model(object):
-    def __init__(self, parent, name, bpm, bar_list, section_list, track):
+    def __init__(self, parent, bpm, bar_list, section_list, track):
         self.parent = parent
-        self.name = name
         self.bpm = bpm
         self.bar_list = bar_list
         self.section_list = section_list
         self.track = track
+
+    def generate_rtmidiout_and_port(self):
+        return 'midiout = rtmidi.MidiOut()\navailable_ports = midiout.get_ports()\n'.format()
+
+
+
+
+    def generate_track(self):
+        return '\n'.join(self.track)
+
+    def __str__(self):
+        out = self.generate_rtmidiout_and_port()
+        out += self.generate_port_checker()
+        out += self.generate_track()
 
 class Section(object):
     def __init__(self, parent, name, bar_list):
@@ -16,12 +29,24 @@ class Section(object):
         self.name = name
         self.bar_list = bar_list
 
+    def generate_bar_list(self):
+        return '\n'.join([str(bar) for bar in self.bar_list])
+
+    def __str__(self):
+        out = self.generate_bar_list()
+
 
 class Track(object):
     def __init__(self, parent, name, section_list):
         self.parent = parent
         self.name = name
         self.section_list = section_list
+
+    def generate_section_list(self):
+        return '\n'.join([str(section) for section in self.section_list])
+
+    def __str__(self):
+        out = self.generate_section_list()
 
 
 class Bar(object):
@@ -31,12 +56,17 @@ class Bar(object):
         self.pattern = pattern
         self.beat_patterns = beat_patterns
 
+    def generate_beat_patterns(self):
+        return '\n'.join([str(beat_pattern) for beat_pattern in self.beat_patterns])
+
+    def __str__(self):
+        out = self.generate_beat_patterns()
 
 class Pattern(object):
-    def __init__(self, parent, name, list):
+    def __init__(self, parent, name, beatPattern):
         self.parent = parent
         self.name = name
-        self.list = list  # liste d'entiers
+        self.beatPattern = beatPattern # liste d'entiers
 
 class Tick(object):
     def __init__(self, parent, value):
@@ -65,6 +95,9 @@ class BeatPattern(object):
     def __init__(self, parent, beats):
         self.parent = parent
         self.beats = beats
+
+
+
 
 if __name__ == "__main__":
 

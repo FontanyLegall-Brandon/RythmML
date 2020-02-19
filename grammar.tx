@@ -1,5 +1,5 @@
-Model :
-    'BPM' bpm=INT
+RythmML :
+    'BPM' bpm=[bpm]
     patterns += Pattern
     sections += Section
     track = Track
@@ -12,15 +12,15 @@ Pattern :
 
 Section :
     'Section' name=ID ':' bars+=[Bar] |
-    'Section' name=ID ':' 'REPEAT' bars+=Bar
+    'Section' name=ID ':' 'REPEAT' bars+=[Bar]
 ;
 
 Track :
-    'Track' name=ID ':' sections+=Section
+    'Track' name=ID ':' sections+=[Section]
 ;
 
 Bar :
-    'Bar' name=ID 'with' pattern=ID ':' beats+=Beat
+    'Bar' name=ID 'with' pattern=[ID] ':' beatsPattern+=[BeatPattern]
 ;
 
 Beat :
