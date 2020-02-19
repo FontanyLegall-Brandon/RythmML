@@ -1,0 +1,18 @@
+Model :
+    'BPM' bpm=INT
+    patterns += Pattern
+;
+
+Pattern :
+    "#pattern" name=ID beatPattern=BeatPattern
+;
+
+BeatPattern :
+    '.' Separator BeatPattern |
+    '.' BeatPattern |
+    '.'
+;
+
+Separator :
+    '|'
+;

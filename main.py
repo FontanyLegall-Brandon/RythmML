@@ -4,51 +4,47 @@ import textx as tx
 NOTE = {'bd':'BASSDRUM'}
 
 class Model(object):
-    def __init__(self, parent, bpm, bar_list, section_list, track):
-        self.parent = parent
+    def __init__(self, bpm, patterns):
         self.bpm = bpm
-        self.bar_list = bar_list
-        self.section_list = section_list
-        self.track = track
+        self.patterns = patterns
 
     def generate_rtmidiout_and_port(self):
         return 'midiout = rtmidi.MidiOut()\navailable_ports = midiout.get_ports()\n'.format()
 
-    def generate_track(self):
-        return '\n'.join(self.track)
+    #def generate_track(self):
+     #   return '\n'.join(self.track)
 
     def __str__(self):
-        out = self.generate_rtmidiout_and_port()
-        out += self.generate_track()
-        return out
+     #   out = self.generate_rtmidiout_and_port()
+      #  out += self.generate_track()
+        return '\n'.join([str(e) for e in self.patterns])
 
 class Section(object):
-    def __init__(self, parent, name, bar_list):
+    def __init__(self, parent, name, bars):
         self.parent = parent
         self.name = name
-        self.bar_list = bar_list
+        self.bars = bars
 
     def generate_bar_list(self):
-        return '\n'.join([str(bar) for bar in self.bar_list])
+        return '\n'.join([str(bar) for bar in self.bars])
 
     def __str__(self):
-        out = self.generate_bar_list()
+        out = self.name
+        out += "\n"+self.generate_bar_list()
         return out
-
 
 class Track(object):
-    def __init__(self, parent, name, section_list):
+    def __init__(self, parent, name, sections):
         self.parent = parent
         self.name = name
-        self.section_list = section_list
+        self.sections = sections
 
-    def generate_section_list(self):
-        return '\n'.join([str(section) for section in self.section_list])
+    def generate_sections(self):
+        return '\n'.join([str(section) for section in self.sections])
 
     def __str__(self):
-        out = self.generate_section_list()
+        out = self.generate_sections()
         return out
-
 
 class Bar(object):
     def __init__(self, parent, name, pattern, beat_patterns):
@@ -71,7 +67,7 @@ class Pattern(object):
     def __init__(self, parent, name, beatPattern):
         self.parent = parent
         self.name = name
-        self.beatPattern = beatPattern # liste d'entiers
+        self.beatPattern = BeatPattern(self, beatPattern)
 
 class Tick(object):
     def __init__(self, parent, value):
@@ -128,9 +124,7 @@ class BeatPattern(object):
     def __init__(self, parent, beats):
         self.parent = parent
         self.beats = beats
-
-    def get_bpm(self):
-        return self.parent.get_bpm()
+        self.size = [len(token) for token in ''.join([str(beat) for beat in self.beats]).split('|')]
 
     def is_beatPattern_matching_with_pattern(self,pattern):
 
@@ -146,30 +140,31 @@ class BeatPattern(object):
         return True
 
     def generate_beats(self):
-
         if(not self.is_beatPattern_matching_with_pattern(self.parent.pattern)):
             return "Beat pattern is not matching with bar pattern"
         return '\n'.join([str(beat) for beat in self.beats])
 
+    def __str__(self):
+        return str(self.size)
+
 
 if __name__ == "__main__":
 
-    if __name__ == '__main__':
+    classes = [Model, BeatPattern, Pattern]
 
-        classes = [Model, Section, Track]
+    meta_model = tx.metamodel_from_file('grammar_pattern.tx', classes=classes)
+    try:
+        os.mkdir('out')
+    except FileExistsError:
+        pass
 
-        meta_model = tx.metamodel_from_file('grammar.tx', classes=classes)
-        try:
-            os.mkdir('out')
-        except FileExistsError:
-            pass
+    for file_name in os.listdir('samples'):
+        ID_REGISTRY = dict()
+        READABLE_BRICK = dict()
+        print("Translating {}".format(file_name))
+        model = meta_model.model_from_file('samples/{}'.format(file_name))
 
-        for file_name in os.listdir('samples'):
-            ID_REGISTRY = dict()
-            READABLE_BRICK = dict()
-            print("Translating {}".format(file_name))
-            model = meta_model.model_from_file('samples/{}'.format(file_name))
-
-            out = open('out/{}'.format(file_name.replace('.rml', '.midi')), 'w')
-            print(model, file=out)
-            out.close()
+        out = open('out/{}'.format(file_name.replace('.rml', '.midi')), 'w')
+        print(model, file=out)
+        out.close()
+        print(model)
