@@ -1,3 +1,8 @@
-xx..|xx..|xx..|xx.. bd
-..x.|..x.|..x.|..x. bd 
-x...|x...|x...|x... bd
+Section toto:
+xx..|xx..|xx..|xx.. test
+..x.|..x.|..x.|..x. test2
+x...|x...|x...|x... tests
+
+Section toto2:
+xx..|xx..|xx..|xx.. test
+

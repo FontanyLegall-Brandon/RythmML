@@ -1,28 +1,32 @@
 import os
 import textx as tx
 
-import time
-import rtmidi
-from mido import MidiFile, MidiTrack
-
 NOTE = {'bd': 60}
 
 
 class Model(object):
-    def __init__(self, beats):
-        self.beats = beats
-
-    def generate_code(self):
-        out = ''
-        for beat in self.beats:
-            out += str(beat)
-        return out
+    def __init__(self, sections):
+        self.sections = sections
 
     def __str__(self):
-        return self.generate_code()
+        out = ''
+        for section in self.sections:
+            out += '\n' + str(section)
+        return out
 
 
-class Beat(object):
+class Section(object):
+    def __init__(self, parent, name, bars):
+        self.parent = parent
+        self.name = name
+        self.bars = bars
+
+    def __str__(self):
+        print('toto')
+        return self.name + '\n'.join([str(bar) for bar in self.bars])
+
+
+class Bar(object):
 
     def __init__(self, parent, ticks, note):
         self.parent = parent
@@ -40,12 +44,14 @@ class Beat(object):
         return out
 
 
-class Bar(object):
-    def __init__(self, parent, name, pattern, beat_patterns):
+
+
+class toto(object):
+    def __init__(self, parent, name, pattern, beats):
         self.parent = parent
         self.name = name
         self.pattern = pattern
-        self.beat_patterns = beat_patterns
+        self.beats = beats
 
     def get_bpm(self):
         return self.parent.get_bpm()
@@ -87,21 +93,6 @@ class BeatPattern(object):
         return str(self.size)
 
 
-
-class Section(object):
-    def __init__(self, parent, name, bars):
-        self.parent = parent
-        self.name = name
-        self.bars = bars
-
-    def generate_bar_list(self):
-        return '\n'.join([str(bar) for bar in self.bars])
-
-    def __str__(self):
-        out = self.name
-        out += "\n"+self.generate_bar_list()
-        return out
-
 class Track(object):
     def __init__(self, parent, name, sections):
         self.parent = parent
@@ -124,7 +115,7 @@ class Pattern(object):
 
 if __name__ == '__main__':
 
-    classes = [Model, Beat]
+    classes = [Model, Bar]
 
     meta_model = tx.metamodel_from_file('grammar_bars.tx', classes=classes)
     try:
