@@ -1,6 +1,18 @@
 Model :
+    'BPM' bpm=INT
+    patterns += Pattern
     sections += Section
     tracks *= Track
+;
+
+Pattern :
+    "#pattern" name=ID beat_pattern=BeatPattern
+;
+
+BeatPattern :
+    '.' Separator BeatPattern |
+    '.' BeatPattern |
+    '.'
 ;
 
 Track :

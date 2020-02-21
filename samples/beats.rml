@@ -1,3 +1,6 @@
+BPM 120
+#pattern p1 ....|....|....|....
+
 Section toto:
 xx..|xx..|xx..|xx.. test
 ..x.|..x.|..x.|..x. test2

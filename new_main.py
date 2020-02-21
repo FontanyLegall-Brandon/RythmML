@@ -5,15 +5,58 @@ NOTE = {'bd': 60}
 
 
 class Model(object):
-    def __init__(self, sections, tracks):
+    def __init__(self, sections, tracks, bpm, patterns):
         self.sections = sections
         self.tracks = tracks
+        self.bpm = bpm
+        self.patterns = patterns
 
     def __str__(self):
         out = ''
+        out += str(self.bpm) + '\n\n'
+        out += '\n'.join([str(pattern) for pattern in self.patterns])
         out += '\n'.join([str(section) for section in self.sections])
         out += '\n'.join([str(track) for track in self.tracks])
         return out
+
+
+class Pattern(object):
+    def __init__(self, parent, name, beat_pattern):
+        self.parent = parent
+        self.name = name
+        self.beat_pattern = BeatPattern(self, beat_pattern)
+
+    def __str__(self):
+        return self.name + ' ' + str(self.beat_pattern) + '\n\n'
+
+
+class BeatPattern(object):
+    def __init__(self, parent, beats):
+        self.parent = parent
+        self.beats = beats
+        self.size = [len(token) for token in ''.join([str(beat) for beat in self.beats]).split('|')]
+
+    def is_beat_pattern_matching_with_pattern(self, pattern):
+
+        base_pattern_size = len(pattern.beats)
+
+        if len(self.beats) != base_pattern_size:
+            return False
+
+        for beat_index in range(base_pattern_size):
+            if not self.beats[0].is_beat_size_equals(pattern.beats[beat_index]):
+                return False
+
+        return True
+
+    def generate_beats(self):
+
+        if not self.is_beatPattern_matching_with_pattern(self.parent.pattern):
+            return "Beat pattern is not matching with bar pattern"
+        return '\n'.join([str(beat) for beat in self.beats])
+
+    def __str__(self):
+        return str(self.size)
 
 
 class Track(object):
@@ -51,7 +94,7 @@ class Bar(object):
 
 if __name__ == '__main__':
 
-    classes = [Model, Bar, Section, Track]
+    classes = [Model, Bar, Section, Track, Pattern, BeatPattern]
 
     meta_model = tx.metamodel_from_file('new_grammar.tx', classes=classes)
 
