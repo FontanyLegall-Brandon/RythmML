@@ -2,12 +2,17 @@ import os
 import textx as tx
 from midiutil import MIDIFile
 from copy import copy
+import pygame
+from pygame.locals import *
+from mido import MidiFile
+
+
 NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64},
         "piano": {"A3": 57, "Db4": 61, "Gb4": 66, "B3": 59, "Eb4": 63, "Ab4": 68,  "E4": 64, "A4": 69,
                   "A6": 93, "A3": 57, "D4": 62}
         }
 
-CHANNEL = {"drum": 10, "piano": 0}
+CHANNEL = {"drum": 9,"piano": 0}
 
 
 class Model(object):
@@ -42,7 +47,7 @@ class Model(object):
 
         midi_tracks = dict()
 
-        channel = 11
+
         time = 0  # In beats
         duration = 1  # In beats
         volume = 100
@@ -80,6 +85,13 @@ class Model(object):
 
         with open("major-scale.mid", "wb") as output_file:
             MyMIDI.writeFile(output_file)
+        pygame.init()
+        pygame.mixer.music.load("major-scale.mid")
+        pygame.mixer.music.play()
+        clock = pygame.time.Clock()
+        while pygame.mixer.music.get_busy():
+            # check if playback has finished
+            clock.tick(30)
 
         return str(instruments_set)
 
