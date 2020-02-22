@@ -20,8 +20,11 @@ Track :
 ;
 
 Section :
-    'Section' name=ID ':' bars += Bar |
-    'repeated' repeat_count=INT 'Section' name=ID : bars += Bar
+    (RepeaterModifier | '') 'Section' pattern=[Pattern] name=ID ':' bars += Bar
+;
+
+RepeaterModifier :
+    'repeated' repeat_count=INT
 ;
 
 Bar :

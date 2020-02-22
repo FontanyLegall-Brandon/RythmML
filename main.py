@@ -12,6 +12,10 @@ class Model(object):
         self.bpm = bpm
         self.patterns = patterns
 
+    def validate(self):
+        for section in self.sections :
+            section.validate()
+
     def __str__(self):
         out = ''
         out += str(self.bpm) + '\n\n'
@@ -25,39 +29,16 @@ class Pattern(object):
     def __init__(self, parent, name, beat_pattern):
         self.parent = parent
         self.name = name
-        self.beat_pattern = BeatPattern(self, beat_pattern)
+        self.beat_pattern = beat_pattern
+
+    def get_beats_size(self):
+        return [len(beat) for beat in repr(self).split('|')]
+    
+    def __repr__(self):
+        return ''.join(str(token) for token in self.beat_pattern)
 
     def __str__(self):
         return self.name + ' ' + str(self.beat_pattern) + '\n\n'
-
-
-class BeatPattern(object):
-    def __init__(self, parent, beats):
-        self.parent = parent
-        self.beats = beats
-        self.size = [len(token) for token in ''.join([str(beat) for beat in self.beats]).split('|')]
-
-    def is_beat_pattern_matching_with_pattern(self, pattern):
-
-        base_pattern_size = len(pattern.beats)
-
-        if len(self.beats) != base_pattern_size:
-            return False
-
-        for beat_index in range(base_pattern_size):
-            if not self.beats[0].is_beat_size_equals(pattern.beats[beat_index]):
-                return False
-
-        return True
-
-    def generate_beats(self):
-
-        if not self.is_beat_pattern_matching_with_pattern(self.parent.pattern):
-            return "Beat pattern is not matching with bar pattern"
-        return '\n'.join([str(beat) for beat in self.beats])
-
-    def __str__(self):
-        return str(self.size)
 
 
 class Track(object):
@@ -71,13 +52,23 @@ class Track(object):
 
 
 class Section(object):
-    def __init__(self, parent, name, bars):
+    def __init__(self, parent, pattern, name, bars):
         self.parent = parent
         self.name = name
         self.bars = bars
+        self.pattern = pattern
 
+    def validate(self):
+        size_tab = self.pattern.get_beats_size()
+        print(size_tab)
+        for bar in self.bars :
+            if(bar.get_beats_size() != size_tab):
+                raise SyntaxError("Bar {} mismatch with pattern {} = {}".format(repr(bar),
+                                                                                self.pattern.name,
+                                                                                repr(self.pattern)))
+                
     def __str__(self):
-        return 'Section ' + self.name + '\n' + '\n'.join([str(bar) for bar in self.bars]) + '\n'
+        return 'Pattern' + str(self.pattern) +'Section ' + self.name + '\n' + '\n'.join([str(bar) for bar in self.bars]) + '\n'
 
 
 class Bar(object):
@@ -88,6 +79,12 @@ class Bar(object):
         self.note = note
         self.current_tick = 0
 
+    def get_beats_size(self):
+        return [len(beat) for beat in repr(self).split('|')]
+
+    def __repr__(self):
+        return ''.join(str(tick) for tick in self.ticks)
+    
     def __str__(self):
         # TODO put midi code inside stp
         return '\n'.join([tick for tick in self.ticks]) + ' ' + self.note
@@ -95,20 +92,14 @@ class Bar(object):
 
 if __name__ == '__main__':
 
-    classes = [Model, Bar, Section, Track, Pattern, BeatPattern]
+    classes = [Model, Bar, Section, Track, Pattern]
 
-    meta_model = tx.metamodel_from_file('new_grammar.tx', classes=classes)
-
-    try:
-        os.mkdir('out')
-    except FileExistsError:
-        pass
-
-    for file_name in os.listdir('samples'):
-        ID_REGISTRY = dict()
-        READABLE_BRICK = dict()
+    meta_model = tx.metamodel_from_file('grammar.tx', classes=classes)
+    for file_name in os.listdir("./samples"):
         print("Translating {}".format(file_name))
         model = meta_model.model_from_file('samples/{}'.format(file_name))
+
+        model.validate()
 
         out = open('out/{}'.format(file_name.replace('.rml', '.py')), 'w')
         print(model, file=out)
