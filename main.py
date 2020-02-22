@@ -13,7 +13,7 @@ NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64},
         "bass": {"A2": 45, "D2": 38, "A4": 69, "D4": 62}
         }
 
-CHANNEL = {"drum": 10, "piano": 0, "bass": 2}
+CHANNEL = {"drum": 9, "piano": 0, "bass": 7}
 
 
 class Model(object):
