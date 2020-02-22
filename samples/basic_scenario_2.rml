@@ -1,0 +1,11 @@
+BPM 118
+
+#pattern p1 ....
+
+Section drums p1 :
+    xxxx drum xH
+    x... drum bd
+    ..x. drum sd
+
+Track track :
+    FROM 0 REPEAT 34 drums

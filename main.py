@@ -2,7 +2,7 @@ import os
 import textx as tx
 from midiutil import MIDIFile
 
-NOTE = {'drum' : {'bd' : 35, 'sd' : 38, 'rc': 51}}
+NOTE = {'drum' : {'bd' : 35, 'sd' : 38, 'rc': 51,'xH':64}}
 
 class Model(object):
     def __init__(self, sections, track, bpm, patterns):
