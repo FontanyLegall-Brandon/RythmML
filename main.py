@@ -38,17 +38,25 @@ class Model(object):
 
         midi_tracks = dict()
 
-        track = 0
         channel = 11
         time = 0  # In beats
         duration = 1  # In beats
         volume = 100
 
+        i = 0
+        for instrument in instruments_set:
+            midi_tracks[instrument] = i
+            i = i + 1
+
         MyMIDI = MIDIFile(
             len(instruments_set)
         )  # One track, defaults to format 1 (tempo track is created
         # automatically)
-        MyMIDI.addTempo(track, time, self.bpm)
+
+        for track in midi_tracks.values():
+            MyMIDI.addTempo(track, time, self.bpm)
+
+
 
         for section_config in sections_config:
             for key in section_config.keys():
@@ -56,7 +64,7 @@ class Model(object):
                     for note_list in section_config[key]:
                         for note in note_list.notes:
                             MyMIDI.addNote(
-                                track,
+                                midi_tracks[note_list.instrument],
                                 channel,
                                 NOTE[note_list.instrument][note],
                                 key,
