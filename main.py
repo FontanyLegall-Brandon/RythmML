@@ -38,15 +38,14 @@ class Model(object):
         midi_tracks = dict()
 
         track = 0
-        channel = 0
+        channel = 11
         time = 0  # In beats
         duration = 1  # In beats
-        tempo = 60  # In BPM
         volume = 100
 
-        MyMIDI = MIDIFile(len(instrument))  # One track, defaults to format 1 (tempo track is created
+        MyMIDI = MIDIFile(len(instruments_set))  # One track, defaults to format 1 (tempo track is created
         # automatically)
-        MyMIDI.addTempo(track, time, tempo)
+        MyMIDI.addTempo(track, time, self.bpm)
 
         for section_config in sections_config:
             for key in section_config.keys():
