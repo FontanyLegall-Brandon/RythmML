@@ -4,8 +4,6 @@ from midiutil import MIDIFile
 from copy import copy
 import pygame
 from pathlib import Path
-from pygame.locals import *
-from mido import MidiFile
 
 
 NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64},

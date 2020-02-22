@@ -1,4 +1,3 @@
 textx
-mido
 midiutil
 pygame
