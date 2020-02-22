@@ -159,7 +159,7 @@ class SectionConfig:
         out["startTime"] = self.startTime
         if self.repeatCount > 0:
             for bar in self.get_bars():
-                tick_offset = 0
+                tick_offset = self.startTime
 
                 for i in range(self.repeatCount):
                     for beats in bar.ticks[0].split("|"):
@@ -172,7 +172,7 @@ class SectionConfig:
                             tick_offset += 1
         else:
             for bar in self.get_bars():
-                tick_offset = 0
+                tick_offset = self.startTime
                 for beats in bar.ticks[0].split("|"):
                     for tick in beats:
                         if tick in ["x"]:
