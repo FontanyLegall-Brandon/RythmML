@@ -5,6 +5,7 @@ from copy import copy
 NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64},
         "piano": {"B2":47,"B3":59,"B4":71,"B5":83,"e2":28,"e4":52,"e5":64,"G2":43,"G4":67,"G6":91,}}
 
+CHANNEL = {"drum": 10,"piano": 0}
 
 class Model(object):
     def __init__(self, sections, track, bpm, patterns):
@@ -66,7 +67,7 @@ class Model(object):
                             print(note)
                             MyMIDI.addNote(
                                 midi_tracks[note_list.instrument],
-                                channel,
+                                CHANNEL[note_list.instrument],
                                 NOTE[note_list.instrument][note],
                                 key,
                                 note_list.duration,
