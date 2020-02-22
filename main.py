@@ -56,19 +56,19 @@ class Model(object):
         for track in midi_tracks.values():
             MyMIDI.addTempo(track, time, self.bpm)
 
-
-
         for section_config in sections_config:
             for key in section_config.keys():
-                if type(key) is int:
+                if type(key) is int or type(key) is float:
                     for note_list in section_config[key]:
+                        print(note_list.duration)
                         for note in note_list.notes:
+                            print(note)
                             MyMIDI.addNote(
                                 midi_tracks[note_list.instrument],
                                 channel,
                                 NOTE[note_list.instrument][note],
                                 key,
-                                duration,
+                                note_list.duration,
                                 volume,
                             )
             print(section_config)
@@ -162,25 +162,34 @@ class SectionConfig:
                 tick_offset = self.startTime
 
                 for i in range(self.repeatCount):
-                    for beats in bar.ticks[0].split("|"):
-                        for tick in beats:
+
+                    bars = bar.ticks[0].split("|")
+                    bars_size = [len(bar) for bar in bars]
+
+                    for i in range(len(bars)):
+                        for tick in bars[i]:
                             if tick in ["x"]:
+                                bar.note.set_duration(4 / bars_size[i])
                                 if tick_offset not in out:
                                     out[tick_offset] = [bar.note]
                                 else:
                                     out[tick_offset].append(bar.note)
-                            tick_offset += 1
+                            tick_offset += 4 / bars_size[i]
         else:
             for bar in self.get_bars():
                 tick_offset = self.startTime
-                for beats in bar.ticks[0].split("|"):
-                    for tick in beats:
+                bars = bar.ticks[0].split("|")
+                bars_size = [len(bar) for bar in bars]
+
+                for i in range(len(bars)):
+                    for tick in bars[i]:
                         if tick in ["x"]:
+                            bar.note.set_duration(4 / bars_size[i])
                             if tick_offset not in out:
                                 out[tick_offset] = [bar.note]
                             else:
                                 out[tick_offset].append(bar.note)
-                        tick_offset += 1
+                        tick_offset += 4 / bars_size[i]
         return out
 
     def __repr__(self):
@@ -204,6 +213,10 @@ class Note:
         self.parent = parent
         self.instrument = instrument
         self.notes = notes
+        self.duration = -1
+
+    def set_duration(self, duration):
+        self.duration = duration
 
     def __repr__(self):
         return "<Notes {} {}>".format(self.instrument, self.notes)
