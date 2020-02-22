@@ -1,0 +1,14 @@
+
+
+BPM 170
+
+#pattern p1 ....
+#pattern p2 ...|....|...|....
+
+repeated 55 Section p1 drums :
+    xxxx rc
+    x... bd
+    ..x. sd
+
+Track drums :
+    drums

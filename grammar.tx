@@ -1,36 +1,31 @@
-RythmML :
-    'BPM' bpm=[bpm]
+Model :
+    'BPM' bpm=INT
     patterns += Pattern
     sections += Section
-    track = Track
+    tracks *= Track
 ;
 
 Pattern :
-    "#pattern" name=ID beatPattern=BeatPattern
-
-;
-
-Section :
-    'Section' name=ID ':' bars+=[Bar] |
-    'Section' name=ID ':' 'REPEAT' bars+=[Bar]
-;
-
-Track :
-    'Track' name=ID ':' sections+=[Section]
-;
-
-Bar :
-    'Bar' name=ID 'with' pattern=[ID] ':' beatsPattern+=[BeatPattern]
-;
-
-Beat :
-     ticks=Tick note=ID
+    "#pattern" name=ID beat_pattern=BeatPattern
 ;
 
 BeatPattern :
     '.' Separator BeatPattern |
     '.' BeatPattern |
-    '.' | Separator
+    '.'
+;
+
+Track :
+    'Track' name=ID ':' sections += [Section]
+;
+
+Section :
+    'Section' name=ID ':' bars += Bar |
+    'repeated' repeat_count=INT 'Section' name=ID : bars += Bar
+;
+
+Bar :
+    ticks+=Tick note=ID
 ;
 
 Tick :
@@ -38,12 +33,9 @@ Tick :
     'x' Separator Tick |
     '.' Tick |
     'x' Tick |
-    '.' | 'x' |
-    Separator
+    '.' | 'x'
 ;
 
 Separator :
-    "|"
+    '|'
 ;
-
-
