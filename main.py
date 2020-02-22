@@ -3,9 +3,12 @@ import textx as tx
 from midiutil import MIDIFile
 from copy import copy
 NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64},
-        "piano": {"B2":47,"B3":59,"B4":71,"B5":83,"e2":28,"e4":52,"e5":64,"G2":43,"G4":67,"G6":91,}}
+        "piano": {"A3": 57, "Db4": 61, "Gb4": 66, "B3": 59, "Eb4": 63, "Ab4": 68,  "E4": 64, "A4": 69,
+                  "A6": 93, "A3": 57, "D4": 62}
+        }
 
-CHANNEL = {"drum": 10,"piano": 0}
+CHANNEL = {"drum": 10, "piano": 0}
+
 
 class Model(object):
     def __init__(self, sections, track, bpm, patterns):
