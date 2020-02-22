@@ -3,6 +3,7 @@ import textx as tx
 from midiutil import MIDIFile
 from copy import copy
 import pygame
+from pathlib import Path
 from pygame.locals import *
 from mido import MidiFile
 
@@ -262,6 +263,7 @@ class Bar(object):
 
 
 if __name__ == "__main__":
+    Path("./out").mkdir(parents=True, exist_ok=True)
 
     classes = [Model, Bar, SectionConfig, Track, Pattern, Section, Note]
 
