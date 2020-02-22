@@ -2,7 +2,8 @@ import os
 import textx as tx
 from midiutil import MIDIFile
 
-NOTE = {'drum' : {'bd' : 35, 'sd' : 38, 'rc': 51,'xH':64}}
+NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64}}
+
 
 class Model(object):
     def __init__(self, sections, track, bpm, patterns):
@@ -12,17 +13,16 @@ class Model(object):
         self.patterns = patterns
 
     def validate(self):
-        for section in self.sections :
+        for section in self.sections:
             section.validate()
 
     def __str__(self):
-        out = ''
-        out += str(self.bpm) + '\n\n'
-        out += '\n'.join([str(pattern) for pattern in self.patterns])
-        out += '\n'.join([str(section) for section in self.sections])
+        out = ""
+        out += str(self.bpm) + "\n\n"
+        out += "\n".join([str(pattern) for pattern in self.patterns])
+        out += "\n".join([str(section) for section in self.sections])
         out += str(self.track)
         return out
-
 
     def __repr__(self):
 
@@ -31,9 +31,9 @@ class Model(object):
 
         for section_config in sections_config:
             for value in section_config.values():
-                if type(value) is list :
+                if type(value) is list:
                     instruments_set += value
-        instruments_set = set(list(map(lambda e : e.instrument, instruments_set)))
+        instruments_set = set(list(map(lambda e: e.instrument, instruments_set)))
 
         midi_tracks = dict()
 
@@ -43,20 +43,29 @@ class Model(object):
         duration = 1  # In beats
         volume = 100
 
-        MyMIDI = MIDIFile(len(instruments_set))  # One track, defaults to format 1 (tempo track is created
+        MyMIDI = MIDIFile(
+            len(instruments_set)
+        )  # One track, defaults to format 1 (tempo track is created
         # automatically)
         MyMIDI.addTempo(track, time, self.bpm)
 
         for section_config in sections_config:
             for key in section_config.keys():
-                if type(key) is int :
-                    for note in section_config[key] :
-                        MyMIDI.addNote(track, channel, NOTE[note.instrument][note.note], key, duration, volume)
+                if type(key) is int:
+                    for note in section_config[key]:
+                        MyMIDI.addNote(
+                            track,
+                            channel,
+                            NOTE[note.instrument][note.note],
+                            key,
+                            duration,
+                            volume,
+                        )
             print(section_config)
 
         with open("major-scale.mid", "wb") as output_file:
             MyMIDI.writeFile(output_file)
-            
+
         return str(instruments_set)
 
 
@@ -67,13 +76,13 @@ class Pattern(object):
         self.beat_pattern = beat_pattern
 
     def get_beats_size(self):
-        return [len(beat) for beat in repr(self).split('|')]
-    
+        return [len(beat) for beat in repr(self).split("|")]
+
     def __repr__(self):
-        return ''.join(str(token) for token in self.beat_pattern)
+        return "".join(str(token) for token in self.beat_pattern)
 
     def __str__(self):
-        return self.name + ' ' + str(self.beat_pattern) + '\n\n'
+        return self.name + " " + str(self.beat_pattern) + "\n\n"
 
 
 class Track(object):
@@ -83,8 +92,16 @@ class Track(object):
         self.sections_config = sections_config
 
     def __str__(self):
-        
-        return '\nTrack ' + self.name + '\n' + '\n'.join([str(section_config) for section_config in self.sections_config]) + '\n'
+
+        return (
+            "\nTrack "
+            + self.name
+            + "\n"
+            + "\n".join(
+                [str(section_config) for section_config in self.sections_config]
+            )
+            + "\n"
+        )
 
 
 class Section:
@@ -94,56 +111,64 @@ class Section:
         self.bars = bars
         self.pattern = pattern
 
-    
     def validate(self):
         size_tab = self.pattern.get_beats_size()
-        for bar in self.bars :
-            if(bar.get_beats_size() != size_tab):
-                raise SyntaxError("Bar {} mismatch with pattern {} = {}".format(repr(bar),
-                                                                                self.pattern.name,
-                                                                                repr(self.pattern)))
-                
+        for bar in self.bars:
+            if bar.get_beats_size() != size_tab:
+                raise SyntaxError(
+                    "Bar {} mismatch with pattern {} = {}".format(
+                        repr(bar), self.pattern.name, repr(self.pattern)
+                    )
+                )
+
     def __str__(self):
-        return 'Pattern ' + str(self.pattern) + repr(self.pattern) + 'Section ' + self.name + '\n' + '\n'.join([str(bar) for bar in self.bars]) + '\n'
+        return (
+            "Pattern "
+            + str(self.pattern)
+            + repr(self.pattern)
+            + "Section "
+            + self.name
+            + "\n"
+            + "\n".join([str(bar) for bar in self.bars])
+            + "\n"
+        )
 
 
 class SectionConfig:
-
     def __init__(self, parent, startTime, repeatCount, section):
         self.parent = parent
         self.startTime = startTime
         self.repeatCount = repeatCount
         self.section = section
-        
+
     def get_bars(self):
         return self.section.bars
 
-
     def get_notes(self):
         out = dict()
-        out['startTime'] = self.startTime
-        if self.repeatCount > 0 :
+        out["startTime"] = self.startTime
+        if self.repeatCount > 0:
             for bar in self.get_bars():
                 tick_offset = 0
-                
-                for i in range(self.repeatCount) :
-                    for beats in bar.ticks[0].split('|'):
-                        for tick in beats :
-                            if tick in ['x'] :
-                                if tick_offset not in out :
+
+                for i in range(self.repeatCount):
+                    for beats in bar.ticks[0].split("|"):
+                        for tick in beats:
+                            if tick in ["x"]:
+                                if tick_offset not in out:
                                     out[tick_offset] = [bar.note]
-                                else :
+                                else:
                                     out[tick_offset].append(bar.note)
                             tick_offset += 1
-        else :
+        else:
             for bar in self.get_bars():
                 tick_offset = 0
-                for beats in bar.ticks[0].split('|'):
-                    for tick in beats :
-                        if tick in ['x'] :
-                            if tick_offset not in out :
+                for beats in bar.ticks[0].split("|"):
+                    for tick in beats:
+                        if tick in ["x"]:
+                            if tick_offset not in out:
                                 out[tick_offset] = [bar.note]
-                            else :
+                            else:
                                 out[tick_offset].append(bar.note)
                         tick_offset += 1
         return out
@@ -152,9 +177,17 @@ class SectionConfig:
         return str(self.get_notes())
 
     def __str__(self):
-        if self.startTime < 0 :
+        if self.startTime < 0:
             raise SyntaxError("Start time can't be lower than 0")
-        return "section modifier : "+ str(self.startTime)+ " : "+ str(self.repeatCount) + " section "+ str(self.section)
+        return (
+            "section modifier : "
+            + str(self.startTime)
+            + " : "
+            + str(self.repeatCount)
+            + " section "
+            + str(self.section)
+        )
+
 
 class Note:
     def __init__(self, parent, instrument, note):
@@ -163,13 +196,13 @@ class Note:
         self.note = note
 
     def __repr__(self):
-        return '<Note {} {}>'.format(self.instrument, self.note)
+        return "<Note {} {}>".format(self.instrument, self.note)
 
     def __str__(self):
-        return '<Note {} {}>'.format(self.instrument, self.note)
+        return "<Note {} {}>".format(self.instrument, self.note)
+
 
 class Bar(object):
-
     def __init__(self, parent, ticks, note):
         self.parent = parent
         self.ticks = ticks
@@ -177,28 +210,28 @@ class Bar(object):
         self.current_tick = 0
 
     def get_beats_size(self):
-        return [len(beat) for beat in repr(self).split('|')]
+        return [len(beat) for beat in repr(self).split("|")]
 
     def __repr__(self):
-        return ''.join(str(tick) for tick in self.ticks)
-    
+        return "".join(str(tick) for tick in self.ticks)
+
     def __str__(self):
         # TODO put midi code inside stp
-        return '\n'.join([tick for tick in self.ticks]) + ' ' + repr(self.note)
+        return "\n".join([tick for tick in self.ticks]) + " " + repr(self.note)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
-    classes = [Model, Bar,SectionConfig,  Track, Pattern, Section, Note]
+    classes = [Model, Bar, SectionConfig, Track, Pattern, Section, Note]
 
-    meta_model = tx.metamodel_from_file('grammar.tx', classes=classes)
+    meta_model = tx.metamodel_from_file("grammar.tx", classes=classes)
     for file_name in os.listdir("./samples"):
         print("Translating {}".format(file_name))
-        model = meta_model.model_from_file('samples/{}'.format(file_name))
+        model = meta_model.model_from_file("samples/{}".format(file_name))
 
         model.validate()
 
-        out = open('out/{}'.format(file_name.replace('.rml', '.py')), 'w')
+        out = open("out/{}".format(file_name.replace(".rml", ".py")), "w")
         print(model, file=out)
         print(model)
         print("REPR OF MODEL")
