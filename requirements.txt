@@ -2,4 +2,4 @@ textx
 Cython
 python-rtmidi
 mido
-mido
+pygame

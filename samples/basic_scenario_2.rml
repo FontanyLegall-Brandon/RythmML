@@ -8,17 +8,24 @@ Section drums p1 :
     ..x...x. drum sd
     x...x... drum bd
 
-Section piano p2 :
+Section piano p2:
     ....x...|........ piano A3, Db4, Gb4
     .......x|.......x piano B3, Eb4, Ab4
     ........|....x... piano Db4, E4, A4
 
 Section piano2 p1:
     ....x..x piano A3, D4, Gb4
+
+Section bass p1:
+    x..x.... bass D4
+    .x...x.x bass A4
+    ..x.x... bass D2
+    ......x. bass A2
     
     
 Track track :
     FROM 3 REPEAT 34 drums
+    FROM 4 REPEAT 34 bass
     FROM 12 REPEAT 7 piano
     FROM 26 REPEAT 2 piano2
     FROM 28 piano
