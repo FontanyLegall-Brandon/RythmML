@@ -1,8 +1,8 @@
 Model :
     'BPM' bpm=INT
-    patterns += Pattern
-    sections += Section
-    tracks *= Track
+    patterns+=Pattern
+    sections+=Section
+    tracks*=Track
 ;
 
 Pattern :
@@ -16,15 +16,15 @@ BeatPattern :
 ;
 
 Track :
-    'Track' name=ID ':' sections += [Section]
+    'Track' name=ID ':' sections_config+=SectionConfig
 ;
 
 Section :
-    (RepeaterModifier | '') 'Section' pattern=[Pattern] name=ID ':' bars += Bar
+    'Section' name=ID pattern=[Pattern] ':' bars+=Bar
 ;
 
-RepeaterModifier :
-    'repeated' repeat_count=INT
+SectionConfig :
+    'FROM' startTime=INT ('REPEAT' repeatCount=INT | '') section=[Section]
 ;
 
 Bar :

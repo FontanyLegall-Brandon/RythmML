@@ -1,13 +1,16 @@
-
-
 BPM 170
 
 #pattern p1 ....
+#pattern p2 ....|....
 
-Section p1 drums :
+Section drums_intro p2:
+    x...|...x sd
+
+Section drums p1 :
     xxxx rc
     x... bd
     ..x. sd
 
-Track drums :
-    drums
+Track track :
+    FROM 0 drums_intro
+    FROM 2 REPEAT 55 drums 

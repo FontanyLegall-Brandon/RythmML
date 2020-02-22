@@ -42,22 +42,24 @@ class Pattern(object):
 
 
 class Track(object):
-    def __init__(self, parent, name, sections):
+    def __init__(self, parent, name, sections_config):
         self.parent = parent
         self.name = name
-        self.sections = sections
+        self.sections_config = sections_config
 
     def __str__(self):
-        return '\nTrack ' + self.name + '\n' + '\n'.join([section.name for section in self.sections]) + '\n'
+        
+        return '\nTrack ' + self.name + '\n' + '\n'.join([str(section_config) for section_config in self.sections_config]) + '\n'
 
 
-class Section(object):
+class Section:
     def __init__(self, parent, pattern, name, bars):
         self.parent = parent
         self.name = name
         self.bars = bars
         self.pattern = pattern
 
+    
     def validate(self):
         size_tab = self.pattern.get_beats_size()
         print(size_tab)
@@ -68,8 +70,21 @@ class Section(object):
                                                                                 repr(self.pattern)))
                 
     def __str__(self):
-        return 'Pattern' + str(self.pattern) +'Section ' + self.name + '\n' + '\n'.join([str(bar) for bar in self.bars]) + '\n'
+        return 'Pattern ' + str(self.pattern) + repr(self.pattern) + 'Section ' + self.name + '\n' + '\n'.join([str(bar) for bar in self.bars]) + '\n'
 
+
+class SectionConfig:
+
+    def __init__(self, parent, startTime, repeatCount, section):
+        self.parent = parent
+        self.startTime = startTime
+        self.repeatCount = repeatCount
+        self.section = section
+        
+    def __str__(self):
+        if self.startTime < 0 :
+            raise SyntaxError("Start time can't be lower than 0")
+        return "section modifier : "+ str(self.startTime)+ " : "+ str(self.repeatCount) + " section "+ str(self.section)
 
 class Bar(object):
 
@@ -92,7 +107,7 @@ class Bar(object):
 
 if __name__ == '__main__':
 
-    classes = [Model, Bar, Section, Track, Pattern]
+    classes = [Model, Bar,SectionConfig,  Track, Pattern, Section]
 
     meta_model = tx.metamodel_from_file('grammar.tx', classes=classes)
     for file_name in os.listdir("./samples"):

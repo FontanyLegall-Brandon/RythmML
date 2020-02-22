@@ -1,0 +1,72 @@
+
+    digraph textX {
+    fontname = "Bitstream Vera Sans"
+    fontsize = 8
+    node[
+        shape=record,
+        style=filled,
+        fillcolor=aliceblue
+    ]
+    nodesep = 0.3
+    edge[dir=black,arrowtail=empty]
+
+
+47595512[ label="{Model|+bpm:INT\l}"]
+
+47580680[ label="{Pattern|+name:ID\l+beat_pattern:BeatPattern\l}"]
+
+47963080[ label="{BeatPattern|. \| BeatPattern\|. BeatPattern\|.}"]
+
+47968024[ label="{Test|}"]
+
+47972968[ label="{Track|+name:ID\l}"]
+
+47966024[ label="{Section|+name:ID\l}"]
+
+47618920[ label="{SectionConfig|+start_time:INT\l+repeat_count:INT\l}"]
+
+47977912[ label="{Bar|+ticks:list[Tick]\l+note:ID\l}"]
+
+47982856[ label="{Tick|. \| Tick\|x Separator Tick\|. Tick\|x Tick\|.\|x}"]
+
+47988920[ label="{Separator|\|}"]
+
+47574856[ label="{ID|}"]
+
+47582680[ label="{STRING|}"]
+
+47587624[ label="{BOOL|}"]
+
+47592568[ label="{INT|}"]
+
+47615976[ label="{FLOAT|}"]
+
+47620920[ label="{STRICTFLOAT|}"]
+
+45139656[ label="{NUMBER|}"]
+
+47825240[ label="{BASETYPE|}"]
+
+47830184[ label="{*OBJECT|}"]
+
+
+
+47595512 -> 47580680[arrowtail=diamond, dir=both, headlabel="patterns 1..*"]
+47595512 -> 47966024[arrowtail=diamond, dir=both, headlabel="sections 1..*"]
+47595512 -> 47968024[arrowtail=diamond, dir=both, headlabel="test "]
+47595512 -> 47972968[arrowtail=diamond, dir=both, headlabel="tracks 0..*"]
+47968024 -> 47966024[headlabel="section "]
+47972968 -> 47618920[arrowtail=diamond, dir=both, headlabel="sections_config 1..*"]
+47966024 -> 47580680[headlabel="pattern "]
+47966024 -> 47977912[arrowtail=diamond, dir=both, headlabel="bars 1..*"]
+47618920 -> 47966024[headlabel="sec "]
+45139656 -> 47620920 [dir=back]
+45139656 -> 47592568 [dir=back]
+47825240 -> 45139656 [dir=back]
+47825240 -> 47615976 [dir=back]
+47825240 -> 47587624 [dir=back]
+47825240 -> 47574856 [dir=back]
+47825240 -> 47582680 [dir=back]
+47830184 -> 47825240 [dir=back]
+
+}
