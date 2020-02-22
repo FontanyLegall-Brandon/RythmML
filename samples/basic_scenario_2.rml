@@ -13,12 +13,13 @@ Section piano p2 :
     .......x|.......x piano B3, Eb4, Ab4
     ........|....x... piano Db4, E4, A4
 
-Section piano2 p2:
-    ....x..x|....x..x piano A3, D4, Gb4
+Section piano2 p1:
+    ....x..x piano A3, D4, Gb4
     
     
 Track track :
-    FROM 0 REPEAT 34 drums
-    FROM 12 REPEAT 2 piano
-    FROM 28 piano2
-    FROM 36 REPEAT 2 piano
+    FROM 3 REPEAT 34 drums
+    FROM 12 REPEAT 7 piano
+    FROM 26 REPEAT 2 piano2
+    FROM 30 piano
+    FROM 31 REPEAT 2 piano2

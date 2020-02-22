@@ -161,10 +161,10 @@ class SectionConfig:
 
     def get_notes(self):
         out = dict()
-        out["startTime"] = self.startTime
+        out["startTime"] = self.startTime * 4
         if self.repeatCount > 0:
             for bar in self.get_bars():
-                tick_offset = self.startTime
+                tick_offset = self.startTime * 4
 
                 for i in range(self.repeatCount):
 
@@ -182,7 +182,7 @@ class SectionConfig:
                             tick_offset += 4 / bars_size[i]
         else:
             for bar in self.get_bars():
-                tick_offset = self.startTime
+                tick_offset = self.startTime * 4
                 bars = bar.ticks[0].split("|")
                 bars_size = [len(bar) for bar in bars]
 
