@@ -2,7 +2,8 @@ import os
 import textx as tx
 from midiutil import MIDIFile
 
-NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64}}
+NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64},
+        "piano": {"B2":47,"B3":59,"B4":71,"B5":83,"e2":28,"e4":52,"e5":64,"G2":43,"G4":67,"G6":91,}}
 
 
 class Model(object):
