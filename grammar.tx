@@ -2,7 +2,7 @@ Model :
     'BPM' bpm=INT
     patterns+=Pattern
     sections+=Section
-    tracks*=Track
+    track =Track
 ;
 
 Pattern :
@@ -28,7 +28,11 @@ SectionConfig :
 ;
 
 Bar :
-    ticks+=Tick note=ID
+    ticks+=Tick note=Note
+;
+
+Note :
+    instrument=ID note=ID
 ;
 
 Tick :
