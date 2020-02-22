@@ -1,7 +1,6 @@
 import os
 import textx as tx
-import mido
-from mido import tick2second, bpm2tempo
+from midiutil import MIDIFile
 
 NOTE = {'drum' : {'bd' : 35, 'sd' : 38, 'rc': 51}}
 
@@ -26,8 +25,7 @@ class Model(object):
 
 
     def __repr__(self):
-        
-        mid = mido.MidiFile(type=2)
+
         sections_config = [e.get_notes() for e in self.track.sections_config]
         instruments_set = list()
 
@@ -38,22 +36,28 @@ class Model(object):
         instruments_set = set(list(map(lambda e : e.instrument, instruments_set)))
 
         midi_tracks = dict()
-        for instrument in instruments_set : 
-            midi_tracks[instrument] = mido.MidiTrack()
+
+        track = 0
+        channel = 0
+        time = 0  # In beats
+        duration = 1  # In beats
+        tempo = 60  # In BPM
+        volume = 100
+
+        MyMIDI = MIDIFile(len(instrument))  # One track, defaults to format 1 (tempo track is created
+        # automatically)
+        MyMIDI.addTempo(track, time, tempo)
 
         for section_config in sections_config:
             for key in section_config.keys():
                 if type(key) is int :
                     for note in section_config[key] :
-                        midi_tracks[note.instrument].append(mido.Message('program_change', program=10, time=0))
-                        midi_tracks[note.instrument].append(mido.Message('note_on',note=NOTE[note.instrument][note.note],time=int(tick2second(1, ticks_per_beat=4, tempo=bpm2tempo(self.bpm))*1000)))
-                        midi_tracks[note.instrument].append(mido.Message('note_off',note=NOTE[note.instrument][note.note],time=int(tick2second(2, ticks_per_beat=4, tempo=bpm2tempo(self.bpm))*1000)))
+                        MyMIDI.addNote(track, channel, NOTE[note.instrument][note.note], key, duration, volume)
             print(section_config)
 
-        for track in midi_tracks.values():
-            mid.tracks.append(track)
-        
-        mid.save("test.mid")
+        with open("major-scale.mid", "wb") as output_file:
+            MyMIDI.writeFile(output_file)
+            
         return str(instruments_set)
 
 
