@@ -53,15 +53,16 @@ class Model(object):
         for section_config in sections_config:
             for key in section_config.keys():
                 if type(key) is int:
-                    for note in section_config[key]:
-                        MyMIDI.addNote(
-                            track,
-                            channel,
-                            NOTE[note.instrument][note.note],
-                            key,
-                            duration,
-                            volume,
-                        )
+                    for note_list in section_config[key]:
+                        for note in note_list.notes:
+                            MyMIDI.addNote(
+                                track,
+                                channel,
+                                NOTE[note_list.instrument][note],
+                                key,
+                                duration,
+                                volume,
+                            )
             print(section_config)
 
         with open("major-scale.mid", "wb") as output_file:
@@ -191,16 +192,16 @@ class SectionConfig:
 
 
 class Note:
-    def __init__(self, parent, instrument, note):
+    def __init__(self, parent, instrument, notes):
         self.parent = parent
         self.instrument = instrument
-        self.note = note
+        self.notes = notes
 
     def __repr__(self):
-        return "<Note {} {}>".format(self.instrument, self.note)
+        return "<Notes {} {}>".format(self.instrument, self.notes)
 
     def __str__(self):
-        return "<Note {} {}>".format(self.instrument, self.note)
+        return "<Notes {} {}>".format(self.instrument, self.notes)
 
 
 class Bar(object):

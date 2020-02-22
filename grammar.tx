@@ -32,7 +32,7 @@ Bar :
 ;
 
 Note :
-    instrument=ID note=ID
+    instrument=ID notes+=ID[',']
 ;
 
 Tick :
