@@ -1,7 +1,7 @@
 import os
 import textx as tx
 from midiutil import MIDIFile
-
+from copy import copy
 NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64},
         "piano": {"B2":47,"B3":59,"B4":71,"B5":83,"e2":28,"e4":52,"e5":64,"G2":43,"G4":67,"G6":91,}}
 
@@ -58,6 +58,7 @@ class Model(object):
 
         for section_config in sections_config:
             for key in section_config.keys():
+                print(key)
                 if type(key) is int or type(key) is float:
                     for note_list in section_config[key]:
                         print(note_list.duration)
@@ -171,9 +172,9 @@ class SectionConfig:
                             if tick in ["x"]:
                                 bar.note.set_duration(4 / bars_size[i])
                                 if tick_offset not in out:
-                                    out[tick_offset] = [bar.note]
+                                    out[tick_offset] = [copy(bar.note)]
                                 else:
-                                    out[tick_offset].append(bar.note)
+                                    out[tick_offset].append(copy(bar.note))
                             tick_offset += 4 / bars_size[i]
         else:
             for bar in self.get_bars():
@@ -186,9 +187,9 @@ class SectionConfig:
                         if tick in ["x"]:
                             bar.note.set_duration(4 / bars_size[i])
                             if tick_offset not in out:
-                                out[tick_offset] = [bar.note]
+                                out[tick_offset] = [copy(bar.note)]
                             else:
-                                out[tick_offset].append(bar.note)
+                                out[tick_offset].append(copy(bar.note))
                         tick_offset += 4 / bars_size[i]
         return out
 
