@@ -1,5 +1,3 @@
 textx
-Cython
-python-rtmidi
-mido
+midiutil
 pygame

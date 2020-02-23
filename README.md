@@ -1,24 +1,14 @@
 # RythmML
 
-## Install python-rtmidi
+## Install
 
-### Linux
-Intall first those packages :
-- libasound2-dev
-- libjack-jackd2-dev
+Required python3. To install dependencies, please run the following command :
 
 ```shell script
-apt install libasound2-dev libjack-jackd2-dev
-pip3 install python-rtmidi
+pip3 install -r requirements.txt
 ```
 
-### Windows
+## Run
+Create your rml(Rythm language) into samples folder and then run main.py
+After run, it is possible to retrieve your work to the format mid directly into the working directory.
 
-```
-pip install python-rtmidi
-```
-
-If Cython is needed:
-```
-pip install Cython
-```

@@ -3,8 +3,7 @@ import textx as tx
 from midiutil import MIDIFile
 from copy import copy
 import pygame
-from pygame.locals import *
-from mido import MidiFile
+from pathlib import Path
 
 
 NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64, "sh": 70},
@@ -265,6 +264,7 @@ class Bar(object):
 
 
 if __name__ == "__main__":
+    Path("./out").mkdir(parents=True, exist_ok=True)
 
     classes = [Model, Bar, SectionConfig, Track, Pattern, Section, Note]
 
