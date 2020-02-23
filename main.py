@@ -7,13 +7,13 @@ from pygame.locals import *
 from mido import MidiFile
 
 
-NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64},
+NOTE = {"drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64, "sh": 70},
         "piano": {"A3": 57, "Db4": 61, "Gb4": 66, "B3": 59, "Eb4": 63, "Ab4": 68,  "E4": 64, "A4": 69,
                   "A6": 93, "A3": 57, "D4": 62},
-        "bass": {"A2": 45, "D2": 38, "A4": 69, "D4": 62}
+        "bass": {"Gb1": 30, "Db2": 37, "E2": 40, "Gb2": 42, "B1": 35}
         }
 
-CHANNEL = {"drum": 9, "piano": 0, "bass": 7}
+CHANNEL = {"drum": 9, "piano": 0, "bass": 1}
 
 
 class Model(object):
@@ -64,6 +64,9 @@ class Model(object):
         # automatically)
 
         for track in midi_tracks.values():
+            MyMIDI.addProgramChange(0, 1, 0, 39)
+            MyMIDI.addProgramChange(0, 0, 0, 5)
+            MyMIDI.addProgramChange(0, 9, 0, 35)
             MyMIDI.addTempo(track, time, self.bpm)
 
         for section_config in sections_config:
