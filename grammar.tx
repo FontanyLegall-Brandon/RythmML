@@ -24,7 +24,7 @@ Section :
 ;
 
 SectionConfig :
-    'FROM' startTime=INT ('REPEAT' repeatCount=INT | '') section=[Section]
+    'FROM' startTime=FLOAT ('REPEAT' repeatCount=INT | '') section=[Section]
 ;
 
 Bar :

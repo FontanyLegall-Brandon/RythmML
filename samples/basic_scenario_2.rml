@@ -17,33 +17,21 @@ Section piano p2:
 Section piano2 p1:
     ....x..x piano A3, D4, Gb4
 
-Section bassIntro p1:
-    .......x bass Gb2
-    ......x. bass E2
-    .....x.. bass Db2
-    ........ bass B1
-    ....x... bass Gb1
-
-Section bassOutro p1:
-   ........ bass Gb2
-   x....... bass E2
-   .x.x.... bass Db2
-   ..x..... bass B1
-   ........ bass Gb1
-
 Section bass p1:
-    .......x bass Gb2
-    x.....x. bass E2
-    .x.x.x.. bass Db2
-    ..x..... bass B1
-    ....x... bass Gb1
-    
+   ...x.... bass Gb2
+   ..x.x... bass E2
+   .x...x.x bass Db2
+   ......x. bass B1
+   x....... bass Gb1
+
 Track track :
     FROM 3 REPEAT 34 drums
-    FROM 4 bassIntro 
-    FROM 5 REPEAT 31 bass
-    FROM 36 bassOutro
+    FROM 4.5 REPEAT 32 bass
     FROM 12 REPEAT 7 piano
     FROM 26 REPEAT 2 piano2
     FROM 28 piano
     FROM 30 REPEAT 2 piano2
+
+
+
+
