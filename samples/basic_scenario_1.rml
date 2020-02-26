@@ -1,0 +1,11 @@
+BPM 170
+
+#pattern p1 ........
+
+Section drums p1 :
+    xxxxxxxx drum rc
+    x...x... drum bd
+    ..x...x. drum sd
+
+Track track :
+    FROM 0 REPEAT 20 drums
