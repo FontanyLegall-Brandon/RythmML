@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 def blockPrint():
     sys.stdout = open(os.devnull, 'w')
 def enablePrint():
@@ -7,6 +8,7 @@ def enablePrint():
 
 blockPrint()
 import pygame
+import pygame.midi
 enablePrint()
 
 import textx as tx
@@ -46,8 +48,9 @@ instruments = parse('note binder/all_instrument_number')
 
 
 class Model(object):
-    def __init__(self, sections, track, bpm, patterns):
+    def __init__(self, binds, sections, track, bpm, patterns):
         self.sections = sections
+        self.binds = binds
         self.track = track
         self.bpm = bpm
         self.patterns = patterns
@@ -135,11 +138,42 @@ class Model(object):
 
     def play(self):
         pygame.init()
+        pygame.display.init()
+        pygame.display.set_mode((250, 250))
+        pygame.display.set_caption(self.name)
         pygame.mixer.music.load("out/{}.mid".format(self.name))
         pygame.mixer.music.play()
         clock = pygame.time.Clock()
+
+        pygame.midi.init()
+        player = pygame.midi.Output(pygame.midi.get_default_output_id())
+        print(pygame.midi.get_count())
+        keys = dict()
         while pygame.mixer.music.get_busy():
             # check if playback has finished
+            if len(self.binds) > 0:
+                for e in pygame.event.get():
+                    # Exit program on pygame window close
+                    if e.type == pygame.QUIT:
+                        sys.exit(0)
+
+                    # Add note on keydown
+                    if e.type == pygame.KEYDOWN:
+                        keys[e.key] = e.unicode
+                        for bind in self.binds:
+                            if bind.key == e.unicode:
+                                print('ON', bind)
+                                player.set_instrument(9)
+                                player.note_on(64, 127)
+
+                    # mute note on release
+                    if e.type == pygame.KEYUP:
+                        for bind in self.binds:
+                            if bind.key == keys[e.key]:
+                                print('OFF', bind)
+                                player.set_instrument(9)
+                                player.note_off(64, 127)
+
             clock.tick(30)
 
 class Pattern(object):
@@ -305,6 +339,16 @@ class Bar(object):
         # TODO put midi code inside stp
         return "\n".join([tick for tick in self.ticks]) + " " + repr(self.note)
 
+class Bind(object):
+    def __init__(self, parent, key, instrument, notes):
+        self.parent = parent
+        self.key = key
+        self.instrument = instrument
+        self.notes = notes
+
+    def __str__(self):
+        return "<Bind key={} instrument={} notes={}".format(self.key, self.instrument, self.notes)
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", help="Input .rml file",
@@ -316,7 +360,7 @@ def parse_args():
 if __name__ == "__main__":
     Path("./out").mkdir(parents=True, exist_ok=True)
 
-    classes = [Model, Bar, SectionConfig, Track, Pattern, Section, Note]
+    classes = [Model,Bind, Bar, SectionConfig, Track, Pattern, Section, Note]
 
     meta_model = tx.metamodel_from_file("grammar.tx", classes=classes)
 
@@ -331,8 +375,7 @@ if __name__ == "__main__":
                 model.play()
         else:
             print("ERROR - file {} not found".format(args.input))
-
-    if False == True :
+    else:
         for file_name in os.listdir("./samples"):
             print("Translating {}".format(file_name))
             model = meta_model.model_from_file("samples/{}".format(file_name))

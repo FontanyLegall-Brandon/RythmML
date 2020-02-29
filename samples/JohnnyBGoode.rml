@@ -1,9 +1,12 @@
 BPM 170
 
+Bind "a" drum RideCymbal1
+Bind "A" drum AcousticBassDrum
+
 #pattern p1 ........
 
 Section drums p1 :
-    xxxxxxxx drum RideCymbal1
+    ........ drum RideCymbal1
     x...x... drum AcousticBassDrum
     ..x...x. drum AcousticSnare
 
