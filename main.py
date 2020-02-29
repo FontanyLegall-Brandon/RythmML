@@ -16,6 +16,7 @@ def parse(filepath):
                 key, value = line.strip().split(' ', 1)
             else:
                 key, value = line.strip().split('\t', 1)
+            value = ''.join(value.split(' '))
             dico[value] = key.strip()
     return dico
 
@@ -107,12 +108,18 @@ class Model(object):
                         for note in note_list.notes:
                             track = midi_tracks[note_list.instrument]
                             channel = channels[note_list.instrument]
-                            pitch = drum_notes[note] if note_list.instrument == 'drum' else notes[note]
-                            MyMIDI.addProgramChange(0, int(channel), 0, int(pitch))
+                            midi_number = drum_notes[note] if note_list.instrument == 'drum' else notes[note]
+                            print(instruments)
+                            print('---------------')
+                            print(note + ': ' + midi_number)
+                            print(note_list.instrument)
+                            print(str(track) + ' ' + str(channel) + ' ' + str(midi_number))
+                            print('---------------')
+                            MyMIDI.addProgramChange(0, int(channel), 0, int(midi_number))
                             MyMIDI.addNote(
                                 int(track),
                                 int(channel),
-                                int(pitch),
+                                int(midi_number),
                                 key,
                                 note_list.duration,
                                 volume,

@@ -10,19 +10,19 @@ Section drums p1 :
     xxxxxxxx drum Maracas
 
 Section piano p2:
-    ....x...|........ piano A3, Db4, Gb4
-    .......x|.......x piano B3, Eb4, Ab4
-    ........|....x... piano Db4, E4, A4
+    ....x...|........ ChurchOrgan A3, Db4, Gb4
+    .......x|.......x ChurchOrgan B3, Eb4, Ab4
+    ........|....x... ChurchOrgan Db4, E4, A4
 
 Section piano2 p1:
-    ....x..x piano A3, D4, Gb4
+    ....x..x ChurchOrgan A3, D4, Gb4
 
 Section bass p1:
-   ...x.... bass Gb2
-   ..x.x... bass E2
-   .x...x.x bass Db2
-   ......x. bass B1
-   x....... bass Gb1
+   ...x.... FretlessBass Gb2
+   ..x.x... FretlessBass E2
+   .x...x.x FretlessBass Db2
+   ......x. FretlessBass B1
+   x....... FretlessBass Gb1
 
 Track track :
     FROM 0 REPEAT 34 drums
