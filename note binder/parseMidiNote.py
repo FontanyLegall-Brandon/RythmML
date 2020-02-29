@@ -4,10 +4,9 @@ import re
 
 if __name__ == "__main__":
 
-    f = open("notefile", "r")
+    f = open("notes", "r")
     f_drum = open("drumNoteFile", "r")
     f_all_instrument = open("all_instrument_number", "r")
-
 
     note_input = [line.strip() for line in f]
     note_drum_input = [line.strip() for line in f_drum]

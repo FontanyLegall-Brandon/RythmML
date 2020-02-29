@@ -4,13 +4,35 @@ from midiutil import MIDIFile
 from copy import copy
 import pygame
 from pathlib import Path
-import json
+
+# note and instrument binds
 
 
-with open('note binder/jsonMidiBind.json', 'r') as f:
-    NOTE = json.load(f)
+def parse(filepath):
+    dico = {}
+    with open(filepath) as fh:
+        for line in fh:
+            if len(line.strip().split(' ', 1)) == 2:
+                key, value = line.strip().split(' ', 1)
+            else:
+                key, value = line.strip().split('\t', 1)
+            dico[value] = key.strip()
+    return dico
 
-CHANNEL = {"drum": 9, "piano": 0, "bass": 1}
+
+def parse_drum(filepath):
+    dico = {}
+    with open(filepath) as fh:
+        for line in fh:
+            key, note, value = line.strip().split(' ', 2)
+            value = ''.join(value.split(' '))
+            dico[value] = key.strip()
+    return dico
+
+
+drum_notes = parse_drum('note binder/drumNoteFile')
+notes = parse('note binder/notes')
+instruments = parse('note binder/all_instrument_number')
 
 
 class Model(object):
@@ -60,10 +82,20 @@ class Model(object):
         )  # One track, defaults to format 1 (tempo track is created
         # automatically)
 
+        channels = {}
+        channel_number = 0
+        for instrument in instruments_set:
+            if channel_number > 15: # only 16 channels from 0 to 15
+                return
+            if instrument == 'drum': # channel 9 reserved for drum
+                channels[instrument] = 9
+            else:
+                if channel_number == 9:
+                    channel_number += 1
+                channels[instrument] = channel_number
+            channel_number += 1
+
         for track in midi_tracks.values():
-            MyMIDI.addProgramChange(0, 1, 0, 39)
-            MyMIDI.addProgramChange(0, 0, 0, 5)
-            MyMIDI.addProgramChange(0, 9, 0, 35)
             MyMIDI.addTempo(track, time, self.bpm)
 
         for section_config in sections_config:
@@ -73,11 +105,14 @@ class Model(object):
                     for note_list in section_config[key]:
                         print(note_list.duration)
                         for note in note_list.notes:
-                            print(note)
+                            track = midi_tracks[note_list.instrument]
+                            channel = channels[note_list.instrument]
+                            pitch = drum_notes[note] if note_list.instrument == 'drum' else notes[note]
+                            MyMIDI.addProgramChange(0, int(channel), 0, int(pitch))
                             MyMIDI.addNote(
-                                midi_tracks[note_list.instrument],
-                                CHANNEL[note_list.instrument],
-                                NOTE[note_list.instrument][note],
+                                int(track),
+                                int(channel),
+                                int(pitch),
                                 key,
                                 note_list.duration,
                                 volume,

@@ -3,9 +3,9 @@ BPM 170
 #pattern p1 ........
 
 Section drums p1 :
-    xxxxxxxx drum rc
-    x...x... drum bd
-    ..x...x. drum sd
+    xxxxxxxx drum RideCymbal1
+    x...x... drum AcousticBassDrum
+    ..x...x. drum AcousticSnare
 
 Track track :
     FROM 0 REPEAT 20 drums
