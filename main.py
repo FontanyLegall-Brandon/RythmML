@@ -4,14 +4,11 @@ from midiutil import MIDIFile
 from copy import copy
 import pygame
 from pathlib import Path
+import json
 
 
-NOTE = {
-        "drum": {"bd": 35, "sd": 38, "rc": 51, "xH": 64, "sh": 70},
-        "piano": {"A3": 57, "Db4": 61, "Gb4": 66, "B3": 59, "Eb4": 63, "Ab4": 68,  "E4": 64, "A4": 69,
-                  "A6": 93, "A3": 57, "D4": 62},
-        "bass": {"Gb1": 30, "Db2": 37, "E2": 40, "Gb2": 42, "B1": 35}
-        }
+with open('note binder/jsonMidiBind.json', 'r') as f:
+    NOTE = json.load(f)
 
 CHANNEL = {"drum": 9, "piano": 0, "bass": 1}
 

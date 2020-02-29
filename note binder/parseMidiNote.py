@@ -12,7 +12,7 @@ if __name__ == "__main__":
     note_input = [line.strip() for line in f]
     note_drum_input = [line.strip() for line in f_drum]
     all_instrument = [line.strip() for line in f_all_instrument]
-    outfile = open("jsonMidiBind.txt", "w")
+    outfile = open("jsonMidiBind.json", "w")
 
     notes = dict()
 

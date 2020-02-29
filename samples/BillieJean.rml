@@ -4,10 +4,10 @@ BPM 118
 #pattern p2 ........|........
 
 Section drums p1 :
-    xxxxxxxx drum xH
-    ..x...x. drum sd
-    x...x... drum bd
-    xxxxxxxx drum sh
+    xxxxxxxx drum LowConga
+    ..x...x. drum AcousticSnare
+    x...x... drum AcousticBassDrum
+    xxxxxxxx drum Maracas
 
 Section piano p2:
     ....x...|........ piano A3, Db4, Gb4

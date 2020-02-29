@@ -174,7 +174,7 @@
         "MuteCuica": "78",
         "OpenCuica": "79",
         "MuteTriangle": "80",
-        "OpenTriangle": "81",
+        "OpenTriangle": "81"
     },
     "piano": {
         "G9": "127",
@@ -283,6 +283,6 @@
         "C1": "24",
         "B0": "23",
         "Bb0": "22",
-        "A0": "21",
-    },
+        "A0": "21"
+    }
 }
