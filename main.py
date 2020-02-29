@@ -1,10 +1,19 @@
 import os
+import sys
+def blockPrint():
+    sys.stdout = open(os.devnull, 'w')
+def enablePrint():
+    sys.stdout = sys.__stdout__
+
+blockPrint()
+import pygame
+enablePrint()
+
 import textx as tx
 from midiutil import MIDIFile
 from copy import copy
-import pygame
 from pathlib import Path
-
+import argparse
 # note and instrument binds
 
 
@@ -122,6 +131,7 @@ class Model(object):
         self.name = output_name.replace('.rml', '')
         with open("out/{}.mid".format(self.name), "wb") as output_file:
             MyMIDI.writeFile(output_file)
+        print("Midi file saved in out/{}.mid".format(self.name))
 
     def play(self):
         pygame.init()
@@ -295,6 +305,13 @@ class Bar(object):
         # TODO put midi code inside stp
         return "\n".join([tick for tick in self.ticks]) + " " + repr(self.note)
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--input", help="Input .rml file",
+                        type=str)
+    parser.add_argument('--play', '-p', help="Input .rml file", action='store_true')
+
+    return parser.parse_args()
 
 if __name__ == "__main__":
     Path("./out").mkdir(parents=True, exist_ok=True)
@@ -302,11 +319,25 @@ if __name__ == "__main__":
     classes = [Model, Bar, SectionConfig, Track, Pattern, Section, Note]
 
     meta_model = tx.metamodel_from_file("grammar.tx", classes=classes)
-    for file_name in os.listdir("./samples"):
-        print("Translating {}".format(file_name))
-        model = meta_model.model_from_file("samples/{}".format(file_name))
 
-        model.validate()
+    args = parse_args()
+    if args.input is not None:
+        if os.path.isfile(args.input):
+            print("Translating {}".format(args.input))
+            model = meta_model.model_from_file(args.input)
+            model.validate()
+            model.build_midi(args.input.split('/')[-1])
+            if args.play :
+                model.play()
+        else:
+            print("ERROR - file {} not found".format(args.input))
 
-        model.build_midi(file_name)
-        #model.play()
+    if False == True :
+        for file_name in os.listdir("./samples"):
+            print("Translating {}".format(file_name))
+            model = meta_model.model_from_file("samples/{}".format(file_name))
+
+            model.validate()
+
+            model.build_midi(file_name)
+            model.play()
