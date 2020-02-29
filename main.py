@@ -42,6 +42,7 @@ class Model(object):
         self.track = track
         self.bpm = bpm
         self.patterns = patterns
+        self.name = None
 
     def validate(self):
         for section in self.sections:
@@ -55,7 +56,7 @@ class Model(object):
         out += str(self.track)
         return out
 
-    def __repr__(self):
+    def build_midi(self, output_name):
 
         sections_config = [e.get_notes() for e in self.track.sections_config]
         instruments_set = list()
@@ -101,10 +102,8 @@ class Model(object):
 
         for section_config in sections_config:
             for key in section_config.keys():
-                print(key)
                 if type(key) is int or type(key) is float:
                     for note_list in section_config[key]:
-                        print(note_list.duration)
                         for note in note_list.notes:
                             track = midi_tracks[note_list.instrument]
                             channel = channels[note_list.instrument]
@@ -113,28 +112,25 @@ class Model(object):
                                 program = instruments[note_list.instrument]
                                 MyMIDI.addProgramChange(int(track), int(channel), 0, int(program))
 
-                            MyMIDI.addNote(
-                                int(track),
-                                int(channel),
-                                int(midi_number),
-                                key,
-                                note_list.duration,
-                                volume,
-                            )
-            print(section_config)
+                            MyMIDI.addNote(int(track),
+                                           int(channel),
+                                           int(midi_number),
+                                           key,
+                                           note_list.duration,
+                                           volume)
 
-        with open("major-scale.mid", "wb") as output_file:
+        self.name = output_name.replace('.rml', '')
+        with open("out/{}.mid".format(self.name), "wb") as output_file:
             MyMIDI.writeFile(output_file)
+
+    def play(self):
         pygame.init()
-        pygame.mixer.music.load("major-scale.mid")
+        pygame.mixer.music.load("out/{}.mid".format(self.name))
         pygame.mixer.music.play()
         clock = pygame.time.Clock()
         while pygame.mixer.music.get_busy():
             # check if playback has finished
             clock.tick(30)
-
-        return str(instruments_set)
-
 
 class Pattern(object):
     def __init__(self, parent, name, beat_pattern):
@@ -312,9 +308,5 @@ if __name__ == "__main__":
 
         model.validate()
 
-        out = open("out/{}".format(file_name.replace(".rml", ".py")), "w")
-        print(model, file=out)
-        print(model)
-        print("REPR OF MODEL")
-        print(repr(model))
-        out.close()
+        model.build_midi(file_name)
+        #model.play()
