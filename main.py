@@ -109,7 +109,10 @@ class Model(object):
                             track = midi_tracks[note_list.instrument]
                             channel = channels[note_list.instrument]
                             midi_number = drum_notes[note] if note_list.instrument == 'drum' else notes[note]
-                            #MyMIDI.addProgramChange(int(track), int(channel), 0, int(midi_number))
+                            if not note_list.instrument == 'drum':
+                                program = instruments[note_list.instrument]
+                                MyMIDI.addProgramChange(int(track), int(channel), 0, int(program))
+
                             MyMIDI.addNote(
                                 int(track),
                                 int(channel),

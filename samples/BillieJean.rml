@@ -10,19 +10,19 @@ Section drums p1 :
     xxxxxxxx drum Maracas
 
 Section piano p2:
-    ....x...|........ AcousticGrandPiano A3, Db4, Gb4
-    .......x|.......x AcousticGrandPiano B3, Eb4, Ab4
-    ........|....x... AcousticGrandPiano Db4, E4, A4
+    ....x...|........ ElectricPiano2 A3, Db4, Gb4
+    .......x|.......x ElectricPiano2 B3, Eb4, Ab4
+    ........|....x... ElectricPiano2 Db4, E4, A4
 
 Section piano2 p1:
-    ....x..x AcousticGrandPiano A3, D4, Gb4
+    ....x..x ElectricPiano2 A3, D4, Gb4
 
 Section bass p1:
-   ...x.... SlapBass1 Gb2
-   ..x.x... SlapBass1 E2
-   .x...x.x SlapBass1 Db2
-   ......x. SlapBass1 B1
-   x....... SlapBass1 Gb1
+   ...x.... FretlessBass Gb2
+   ..x.x... FretlessBass E2
+   .x...x.x FretlessBass Db2
+   ......x. FretlessBass B1
+   x....... FretlessBass Gb1
 
 Track track :
     FROM 0 REPEAT 34 drums
