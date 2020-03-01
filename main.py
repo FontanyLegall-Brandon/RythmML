@@ -70,9 +70,7 @@ class Model(object):
         return out
 
     def build_midi(self, output_name):
-        for e in self.notePatterns:
-            print(e)
-        sections_config = [e.get_notes() for e in self.track.sections_config]
+        sections_config = [e.get_notes(self.notePatterns) for e in self.track.sections_config]
         instruments_set = list()
 
         for section_config in sections_config:
@@ -82,7 +80,6 @@ class Model(object):
         instruments_set = set(list(map(lambda e: e.instrument, instruments_set)))
 
         midi_tracks = dict()
-
 
         time = 0  # In beats
         duration = 1  # In beats
@@ -255,9 +252,12 @@ class SectionConfig:
     def get_bars(self):
         return self.section.bars
 
-    def get_notes(self):
+    def get_notes(self, notes_patterns):
         out = dict()
         out["startTime"] = self.startTime * 4
+        notes = dict()
+        for e in notes_patterns:
+            notes[e.token] = e.duration_multiplier
         if self.repeatCount > 0:
             for bar in self.get_bars():
                 tick_offset = self.startTime * 4
@@ -269,13 +269,17 @@ class SectionConfig:
 
                     for i in range(len(bars)):
                         for tick in bars[i]:
-                            if tick in ["x"]:
-                                bar.note.set_duration(4 / bars_size[i])
+                            if tick in notes.keys():
+                                bar.note.set_duration(notes[tick] * 4 / bars_size[i])
                                 if tick_offset not in out:
                                     out[tick_offset] = [copy(bar.note)]
                                 else:
                                     out[tick_offset].append(copy(bar.note))
+                            else:
+                                if tick != '.':
+                                    raise ValueError('Note "{}" not defined'.format(tick))
                             tick_offset += 4 / bars_size[i]
+
         else:
             for bar in self.get_bars():
                 tick_offset = self.startTime * 4
@@ -284,17 +288,17 @@ class SectionConfig:
 
                 for i in range(len(bars)):
                     for tick in bars[i]:
-                        if tick in ["x"]:
-                            bar.note.set_duration(4 / bars_size[i])
+                        if tick in notes.keys():
+                            bar.note.set_duration(notes[tick] * 4 / bars_size[i])
                             if tick_offset not in out:
                                 out[tick_offset] = [copy(bar.note)]
                             else:
                                 out[tick_offset].append(copy(bar.note))
+                        else:
+                            if tick != '.':
+                                raise ValueError('Note "{}" not defined'.format(tick))
                         tick_offset += 4 / bars_size[i]
         return out
-
-    def __repr__(self):
-        return str(self.get_notes())
 
     def __str__(self):
         if self.startTime < 0:
@@ -364,14 +368,6 @@ class NotePattern(object):
     def __str__(self):
         return "<NotePattern token={} duration_multiplier={}>".format(self.token, self.duration_multiplier)
 
-class Tick(object):
-    def __init__(self, parent, notePattern):
-        self.parent = parent
-        self.notePattern = notePattern
-
-    def __str__(self):
-        return "<Tick notePattern={}>".format(self.notePattern)
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", help="Input .rml file",
@@ -383,7 +379,7 @@ def parse_args():
 if __name__ == "__main__":
     Path("./out").mkdir(parents=True, exist_ok=True)
 
-    classes = [Model,Bind,NotePattern,Tick, Bar, SectionConfig, Track, Pattern, Section, Note]
+    classes = [Model,Bind,NotePattern, Bar, SectionConfig, Track, Pattern, Section, Note]
 
     meta_model = tx.metamodel_from_file("grammar.tx", classes=classes)
 

@@ -1,28 +1,30 @@
 BPM 118
 
+#note x 1
+
 #pattern p1 ........
 #pattern p2 ........|........
 
 Section drums p1 :
-    xxxxxxxx drum LowConga
-    ..x...x. drum AcousticSnare
-    x...x... drum AcousticBassDrum
-    xxxxxxxx drum Maracas
+    [xxxxxxxx] drum LowConga
+    [..x...x.] drum AcousticSnare
+    [x...x...] drum AcousticBassDrum
+    [xxxxxxxx] drum Maracas
 
 Section piano p2:
-    ....x...|........ ElectricPiano2 A3, Db4, Gb4
-    .......x|.......x ElectricPiano2 B3, Eb4, Ab4
-    ........|....x... ElectricPiano2 Db4, E4, A4
+    [....x...|........] ElectricPiano2 A3, Db4, Gb4
+    [.......x|.......x] ElectricPiano2 B3, Eb4, Ab4
+    [........|....x...] ElectricPiano2 Db4, E4, A4
 
 Section piano2 p1:
-    ....x..x ElectricPiano2 A3, D4, Gb4
+    [....x..x] ElectricPiano2 A3, D4, Gb4
 
 Section bass p1:
-   ...x.... FretlessBass Gb2
-   ..x.x... FretlessBass E2
-   .x...x.x FretlessBass Db2
-   ......x. FretlessBass B1
-   x....... FretlessBass Gb1
+   [...x....] FretlessBass Gb2
+   [..x.x...] FretlessBass E2
+   [.x...x.x] FretlessBass Db2
+   [......x.] FretlessBass B1
+   [x.......] FretlessBass Gb1
 
 Track track :
     FROM 0 REPEAT 34 drums

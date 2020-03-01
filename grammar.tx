@@ -34,7 +34,7 @@ SectionConfig :
 ;
 
 Bar :
-    ticks+=Tick note=Note
+    '[' ticks+=Tick ']' note=Note
 ;
 
 Note :
@@ -47,10 +47,10 @@ NotePattern :
 
 Tick :
     '.' Separator Tick |
-    'x' Separator Tick |
+    /[a-zA-Z]/ Separator Tick |
     '.' Tick |
-    'x' Tick |
-    '.' | 'x'
+    /[a-zA-Z]/ Tick |
+    '.' | /[a-zA-Z]/
 ;
 
 Separator :

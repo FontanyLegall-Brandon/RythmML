@@ -7,35 +7,35 @@ BPM 96
 #pattern p2 ............
 
 Section piano p1:
-    xxxxxx......|............ AcousticGrandPiano A5, Gb5, Db5
-    ......xx....|............ AcousticGrandPiano A5, E5, Db5
-    ........xxxx|............ AcousticGrandPiano A5, D5, B4
-    ............|xxxxxx...xxx AcousticGrandPiano Ab5, E5, B4
-    ............|......xxx... AcousticGrandPiano A5, E5, B4
+    [xxxxxx......|............] AcousticGrandPiano A5, Gb5, Db5
+    [......xx....|............] AcousticGrandPiano A5, E5, Db5
+    [........xxxx|............] AcousticGrandPiano A5, D5, B4
+    [............|xxxxxx...xxx] AcousticGrandPiano Ab5, E5, B4
+    [............|......xxx...] AcousticGrandPiano A5, E5, B4
 
 Section drum p1:
-    xxxxxxxxxxxx|xxxxxxxxxxxx drum ClosedHiHat
-    x..x..x.xx..|x..x..x..x.. drum AcousticBassDrum
-    ...x.....x..|...x.....x.. drum AcousticSnare
+    [xxxxxxxxxxxx|xxxxxxxxxxxx] drum ClosedHiHat
+    [x..x..x.xx..|x..x..x..x..] drum AcousticBassDrum
+    [...X.....X..|...X.....X..] drum AcousticSnare
 
 Section drum0 p2:
-    xxxxxxxxxxxx drum ClosedHiHat
-    x..x..x..x.. drum AcousticBassDrum
-    ...x.....x.. drum AcousticSnare
+    [xxxxxxxxxxxx] drum ClosedHiHat
+    [x..x..x..x..] drum AcousticBassDrum
+    [...x.....x..] drum AcousticSnare
 
 Section intro_drum2 p2:
-    .......x.x.. drum LowMidTom
-    .....x.x.... drum LowTom
-    ...........x drum LowFloorTom
+    [.......x.x..] drum LowMidTom
+    [.....x.x....] drum LowTom
+    [...........x] drum LowFloorTom
 
 Section intro_drum p2:
-    ..........x. drum AcousticSnare
+    [..........x.] drum AcousticSnare
 
 Section intro_guitar p1:
-    x...........|............ OverdriveGuitar Gb3, Db4
-    ......x.....|............ OverdriveGuitar Ab3, Db3
-    ........x.x.|............ OverdriveGuitar A3, D3
-    ............|x........... OverdriveGuitar B3, E3
+    [X...........|............] OverdriveGuitar Gb3, Db4
+    [......X.....|............] OverdriveGuitar Ab3, Db3
+    [........X.X.|............] OverdriveGuitar A3, D3
+    [............|X...........] OverdriveGuitar B3, E3
     
 
 Track track:
