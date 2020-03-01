@@ -163,17 +163,20 @@ class Model(object):
                         for bind in self.binds:
                             if bind.key == e.unicode:
                                 print('ON', bind)
-                                player.set_instrument(9)
-                                player.note_on(64, 127)
+                                for note in bind.notes:
+                                    player.set_instrument(int(instruments[bind.instrument]))
+                                    midi_number = drum_notes[note] if bind.instrument == 'drum' else notes[note]
+                                    player.note_on(int(midi_number), 127)
 
                     # mute note on release
                     if e.type == pygame.KEYUP:
                         for bind in self.binds:
                             if bind.key == keys[e.key]:
                                 print('OFF', bind)
-                                player.set_instrument(9)
-                                player.note_off(64, 127)
-
+                                for note in bind.notes:
+                                    player.set_instrument(int(instruments[bind.instrument]))
+                                    midi_number = drum_notes[note] if bind.instrument == 'drum' else notes[note]
+                                    player.note_off(int(midi_number), 127)
             clock.tick(30)
 
 class Pattern(object):
@@ -347,7 +350,7 @@ class Bind(object):
         self.notes = notes
 
     def __str__(self):
-        return "<Bind key={} instrument={} notes={}".format(self.key, self.instrument, self.notes)
+        return "<Bind key={} instrument={} notes={}>".format(self.key, self.instrument, self.notes)
 
 def parse_args():
     parser = argparse.ArgumentParser()
