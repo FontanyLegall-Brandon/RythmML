@@ -2,14 +2,30 @@ BPM 96
 
 #note x 1.0
 #note X 2.0
+#note o 3.0
+#note O 4.0
 
 #pattern p1 ............|............
 #pattern p2 ............
+#pattern p3 ............|............|............|............
+
+Section piano_grave p1:
+    [xxxxxx......|............] AcousticGrandPiano A3, D4, Gb4
+    [......xxxxxx|............] AcousticGrandPiano B3, E4, Ab4
+    [............|xxxxxxxx....] AcousticGrandPiano Db4, E4, A4
+    [............|........X...] AcousticGrandPiano B3, E4, Ab4
+    [............|..........X.] AcousticGrandPiano Bb3, Eb4, G4
+
+Section piano_outro p1:
+    [xxxxxx......|............] AcousticGrandPiano A3, D4, Gb4
+    [......xxxxxx|............] AcousticGrandPiano B3, E4, Ab4
+    [............|xxxxxx......] AcousticGrandPiano A4, D5, Gb5
+    [............|......xxxxxx] AcousticGrandPiano B4, E5, Ab5
 
 Section piano p1:
-    [xxxxxx......|............] AcousticGrandPiano A5, Gb5, Db5
-    [......xx....|............] AcousticGrandPiano A5, E5, Db5
-    [........xxxx|............] AcousticGrandPiano A5, D5, B4
+    [xxxxxx......|............] AcousticGrandPiano A5, Gb5, Db5 
+    [......xx....|............] AcousticGrandPiano A5, E5, Db5 
+    [........xxxx|............] AcousticGrandPiano A5, D5, B4 
     [............|xxxxxx...xxx] AcousticGrandPiano Ab5, E5, B4
     [............|......xxx...] AcousticGrandPiano A5, E5, B4
 
@@ -32,16 +48,55 @@ Section intro_drum p2:
     [..........x.] drum AcousticSnare
 
 Section intro_guitar p1:
-    [X...........|............] OverdriveGuitar Gb3, Db4
+    [o...........|............] OverdriveGuitar Gb3, Db4
     [......X.....|............] OverdriveGuitar Ab3, Db3
     [........X.X.|............] OverdriveGuitar A3, D3
-    [............|X...........] OverdriveGuitar B3, E3
+    [............|o...........] OverdriveGuitar B3, E3
+
+Section intro_guitar_end p2:
+    [X...........] OverdriveGuitar E3
+    [..X.........] OverdriveGuitar Db3
+    [....X.......] OverdriveGuitar C3
+    [......O.....] OverdriveGuitar B2
+
+Section intro_bass p2:
+    [..O.........] ElectricFingeredBass Db3 
+    [.x..........] ElectricFingeredBass C3
+    [x...........] ElectricFingeredBass B2
     
+Section bass p1:
+    [..O.....X...|............] ElectricFingeredBass Gb3
+    [.x.....x....|............] ElectricFingeredBass E3
+    [x.....x...X.|........O...] ElectricFingeredBass Db3 
+    [............|X......x....] ElectricFingeredBass C3
+    [............|..O...x.....] ElectricFingeredBass B2
+
+Section bass2 p3:
+    [............|..X.........|............|..X.........] ElectricFingeredBass E3 
+    [........O...|xx..........|........O...|xx..........] ElectricFingeredBass D3
+    [......xx....|....X.......|..O...xx....|....X.......] ElectricFingeredBass Db3 
+    [............|......X.....|............|......X.....] ElectricFingeredBass C3
+    [............|........O...|xx..........|........O...] ElectricFingeredBass B2  
+
+Section bassOutro p1:
+    [............|..O.........] ElectricFingeredBass E3 
+    [........xxxx|xx..........] ElectricFingeredBass D3
+    [..O...xx....|............] ElectricFingeredBass Db3 
+    [............|............] ElectricFingeredBass C3
+    [xx..........|............] ElectricFingeredBass B2 
+
 
 Track track:
     FROM 1 intro_drum
-    FROM 2 REPEAT 5 piano
+    FROM 2 REPEAT 4 piano
+    FROM 10 REPEAT 4 piano_grave
+    FROM 18 piano_outro
     FROM 3 intro_drum2
     FROM 4 drum0
-    FROM 5 REPEAT 3 drum
+    FROM 5 REPEAT 8 drum
     FROM 6 REPEAT 2 intro_guitar
+    FROM 9.5 intro_guitar_end
+    FROM 10.35 intro_bass
+    FROM 10.85 REPEAT 2 bass
+    FROM 14.35 REPEAT 1 bass2
+    FROM 18.35 bassOutro
