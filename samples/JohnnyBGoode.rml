@@ -1,9 +1,12 @@
 BPM 170
 
+Bind "a" ElectricPiano2 A3, Db4, Gb4
+Bind "z" ElectricPiano2 B3, Eb4, Ab4
+
 #pattern p1 ........
 
 Section drums p1 :
-    xxxxxxxx drum RideCymbal1
+    ........ drum RideCymbal1
     x...x... drum AcousticBassDrum
     ..x...x. drum AcousticSnare
 

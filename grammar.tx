@@ -1,8 +1,13 @@
 Model :
     'BPM' bpm=INT
+    binds*=Bind
     patterns+=Pattern
     sections+=Section
     track =Track
+;
+
+Bind :
+    'Bind' key=STRING instrument=ID notes+=ID[',']
 ;
 
 Pattern :
