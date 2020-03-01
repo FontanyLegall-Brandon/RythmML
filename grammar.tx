@@ -1,6 +1,7 @@
 Model :
     'BPM' bpm=INT
     binds*=Bind
+    notePatterns*=NotePattern
     patterns+=Pattern
     sections+=Section
     track =Track
@@ -38,6 +39,10 @@ Bar :
 
 Note :
     instrument=ID notes+=ID[',']
+;
+
+NotePattern :
+ '#note' token=ID duration_multiplier=FLOAT
 ;
 
 Tick :

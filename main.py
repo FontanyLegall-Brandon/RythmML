@@ -48,12 +48,13 @@ instruments = parse('note binder/all_instrument_number')
 
 
 class Model(object):
-    def __init__(self, binds, sections, track, bpm, patterns):
+    def __init__(self, binds,notePatterns, sections, track, bpm, patterns):
         self.sections = sections
         self.binds = binds
         self.track = track
         self.bpm = bpm
         self.patterns = patterns
+        self.notePatterns = notePatterns
         self.name = None
 
     def validate(self):
@@ -69,7 +70,8 @@ class Model(object):
         return out
 
     def build_midi(self, output_name):
-
+        for e in self.notePatterns:
+            print(e)
         sections_config = [e.get_notes() for e in self.track.sections_config]
         instruments_set = list()
 
@@ -147,7 +149,6 @@ class Model(object):
 
         pygame.midi.init()
         player = pygame.midi.Output(pygame.midi.get_default_output_id())
-        print(pygame.midi.get_count())
         keys = dict()
         while pygame.mixer.music.get_busy():
             # check if playback has finished
@@ -342,6 +343,7 @@ class Bar(object):
         # TODO put midi code inside stp
         return "\n".join([tick for tick in self.ticks]) + " " + repr(self.note)
 
+
 class Bind(object):
     def __init__(self, parent, key, instrument, notes):
         self.parent = parent
@@ -351,6 +353,24 @@ class Bind(object):
 
     def __str__(self):
         return "<Bind key={} instrument={} notes={}>".format(self.key, self.instrument, self.notes)
+
+
+class NotePattern(object):
+    def __init__(self, parent, token, duration_multiplier):
+        self.parent = parent
+        self.token = token
+        self.duration_multiplier = duration_multiplier
+
+    def __str__(self):
+        return "<NotePattern token={} duration_multiplier={}>".format(self.token, self.duration_multiplier)
+
+class Tick(object):
+    def __init__(self, parent, notePattern):
+        self.parent = parent
+        self.notePattern = notePattern
+
+    def __str__(self):
+        return "<Tick notePattern={}>".format(self.notePattern)
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -363,7 +383,7 @@ def parse_args():
 if __name__ == "__main__":
     Path("./out").mkdir(parents=True, exist_ok=True)
 
-    classes = [Model,Bind, Bar, SectionConfig, Track, Pattern, Section, Note]
+    classes = [Model,Bind,NotePattern,Tick, Bar, SectionConfig, Track, Pattern, Section, Note]
 
     meta_model = tx.metamodel_from_file("grammar.tx", classes=classes)
 
