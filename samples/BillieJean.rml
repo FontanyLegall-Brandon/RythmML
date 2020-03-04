@@ -6,7 +6,7 @@ BPM 118
 #pattern p2 ........|........
 
 Section drums p1 :
-    [xxxxxxxx] drum LowConga
+    [xxxxxxxx] drum ClosedHiHat
     [..x...x.] drum AcousticSnare
     [x...x...] drum AcousticBassDrum
     [xxxxxxxx] drum Maracas
