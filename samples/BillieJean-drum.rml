@@ -1,0 +1,14 @@
+BPM 118
+
+#note x 1
+
+#pattern p1 ........
+#pattern p2 ........|........
+
+Section drums p1 :
+    [xxxxxxxx] drum ClosedHiHat
+    [..x...x.] drum AcousticSnare
+    [x...x...] drum AcousticBassDrum
+
+Track track :
+    FROM 0 REPEAT 34 drums
